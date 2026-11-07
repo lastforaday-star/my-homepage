@@ -244,11 +244,17 @@
 
     <!-- 자바스크립트 영역 -->
     <script>
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const day = today.getDate();
-        document.getElementById("current-date").innerText = year + "년 " + month + "월 " + day + "일";
+        // 페이지가 완전히 로드된 후 실행되도록 안전하게 감싸기
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            const dateElement = document.getElementById("current-date");
+            if (dateElement) {
+                dateElement.innerText = year + "년 " + month + "월 " + day + "일";
+            }
+        });
 
         const fortunes = [
             "오늘은 공부를 안 해도 죄책감이 들지 않는 마법의 날! 😆",
@@ -263,7 +269,7 @@
             "거울을 보세요. 오늘 미모가 폭발해서 위험할 수 있습니다 💣",
             "모르는 번호로 오는 전화는 받지 마세요. 행운이 도망갑니다!",
             "오늘은 뭘 해도 다 잘 풀릴... 리가 없으니 마음을 비우세요 😌",
-            "갑자기 치킨이 먹고 싶다면 그것은 운명의 계시입니다."
+            "갑자기 치킨이 먹고 싶다면 그것은 운명의 계시입니다.",
             "누군가 맛있는 걸 사줄지도 몰라요. 지갑을 사수하세요!",
             "길 가다가 새똥 맞을 수도 있으니까 나가지 마세요잉",
             "로또 사자! 당첨되면 친구(안소영)에게 주면 두배가 될겨",
@@ -272,7 +278,10 @@
 
         function showFortune() {
             const randomIndex = Math.floor(Math.random() * fortunes.length);
-            document.getElementById("fortune-text").innerText = fortunes[randomIndex];
+            const fortuneText = document.getElementById("fortune-text");
+            if (fortuneText) {
+                fortuneText.innerText = fortunes[randomIndex];
+            }
         }
     </script>
 </body>
