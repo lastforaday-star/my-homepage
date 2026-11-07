@@ -6,280 +6,222 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
-
-<style>
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Single Day', sans-serif;
-        background-image: url("배경.gif");
-        background-repeat: repeat;
-        background-position: center;
-        background-attachment: fixed;
-    }
-
-    /* 전체 미니홈피 */
-    .homepage {
-        width: 1000px;
-        min-height: 600px;
-        margin: 50px auto;
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 190px 1fr 130px;
-        gap: 15px;
-        background: #C2E2DD;
-        border: 5px solid white;
-        border-radius: 25px;
-    }
-
-    /* 왼쪽 프로필 */
-    .profile {
-        background: white;
-        border: 2px solid #86BAAE;
-        border-radius: 10px;
-        padding: 15px;
-    }
-
-    .profile h3 {
-        font-size: 17px;
-        text-align: center;
-        color: #B41C28;
-    }
-
-    .profile-image {
-        width: 130px;
-        height: 130px;
-        margin: 15px auto;
-        background: #C2E2DD;
-        border: 2px dashed #86BAAE;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 45px;
-    }
-
-    .profile p {
-        font-size: 20px;
-        line-height: 1.8;
-    }
-
-    /* 가운데 콘텐츠 */
-    .content {
-        background: white;
-        border: 2px solid #86BAAE;
-        border-radius: 10px;
-        padding: 15px;
-    }
-
-    .content h2 {
-        color: #B41C28;
-        font-size: 17px;
-        border-bottom: 1px solid #86BAAE;
-        padding-bottom: 10px;
-    }
-
-    .news {
-        background: #C2E2DD;
-        border: 1px solid #86BAAE;
-        padding: 12px;
-        margin-bottom: 15px;
-        font-size: 17px;
-        line-height: 2;
-    }
-
-    .miniroom {
-        height: 280px;
-        background: #ffffff;
-        border: 2px solid #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 55px;
-    }
-
-    .miniroom img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .miniroom p {
-        font-size: 14px;
-        color: #9E2024;
-    }
-
-    /* 오른쪽 메뉴 */
-    .menu {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .menu a {
-        display: block;
-        padding: 12px 5px;
-        text-align: center;
-        text-decoration: none;
-        color: white;
-        background: #86BAAE;
-        border: 1px solid #B41C28;
-        border-radius: 8px;
-        font-size: 19px;
-    }
-
-    .menu a:hover {
-        background: #9CA123;
-    }
-
-    .menu .youtube {
-        background: #B41C28;
-    }
-
-    .menu .back {
-        background: #9E2024;
-    }
-
-    /* 하단 문구 */
-    .footer {
-        text-align: center;
-        font-size: 11px;
-        color: #9E2024;
-        margin-top: 15px;
-    }
-    
-    /* 만든이 영역 */
-    .creator {
-        width: 900px;
-        min-height: 230px;
-        margin: -30px auto 50px;
-        padding: 20px;
-        border: 5px solid white;
-        border-radius: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        font-size: 25px;
-        color: #B41C28;
-    }
-
-    /* 만든이 사진 */
-    .creator img {
-        width: 800px;
-        height: 700px;
-        object-fit: cover;
-        border-radius: 15px;
-    }
-
-    /* 운세 위젯 스타일 */
-    .fortune-box {
-        margin-top: 20px;
-        padding: 12px;
-        background-color: #f4f9f6;
-        border: 2px dashed #b2d8c8;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .fortune-title {
-        font-size: 15px;
-        font-weight: bold;
-        color: #4a7c59;
-        margin-bottom: 8px;
-    }
-
-    #fortune-text {
-        font-size: 12px;
-        color: #333;
-        margin-bottom: 10px;
-        line-height: 1.4;
-        min-height: 35px;
-    }
-
-    .fortune-box button {
-        background-color: #76a08e;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 11px;
-        cursor: pointer;
-    }
-
-    .fortune-box button:hover {
-        background-color: #5c8372;
-    }
-
-    /* 운세 안내 문구 스타일 (오타 수정 완료) */
-    .fortune-tip {
-        font-size: 10px !important;
-        color: #666;
-        margin-top: 8px;
-        line-height: 1.3;
-    }
-</style>
-
+    <style>
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Single Day', sans-serif;
+            background-image: url("배경.gif");
+            background-repeat: repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .homepage {
+            width: 1000px;
+            min-height: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 190px 1fr 130px;
+            gap: 15px;
+            background: #C2E2DD;
+            border: 5px solid white;
+            border-radius: 25px;
+        }
+        .profile {
+            background: white;
+            border: 2px solid #86BAAE;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .profile h3 {
+            font-size: 17px;
+            text-align: center;
+            color: #B41C28;
+        }
+        .profile-image {
+            width: 130px;
+            height: 130px;
+            margin: 15px auto;
+            background: #C2E2DD;
+            border: 2px dashed #86BAAE;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+        .profile p {
+            font-size: 20px;
+            line-height: 1.8;
+        }
+        .content {
+            background: white;
+            border: 2px solid #86BAAE;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .content h2 {
+            color: #B41C28;
+            font-size: 17px;
+            border-bottom: 1px solid #86BAAE;
+            padding-bottom: 10px;
+        }
+        .news {
+            background: #C2E2DD;
+            border: 1px solid #86BAAE;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 17px;
+            line-height: 2;
+        }
+        .miniroom {
+            height: 280px;
+            background: #ffffff;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+        }
+        .miniroom img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .miniroom p {
+            font-size: 14px;
+            color: #9E2024;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .menu a {
+            display: block;
+            padding: 12px 5px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background: #86BAAE;
+            border: 1px solid #B41C28;
+            border-radius: 8px;
+            font-size: 19px;
+        }
+        .menu a:hover {
+            background: #9CA123;
+        }
+        .menu .youtube {
+            background: #B41C28;
+        }
+        .menu .back {
+            background: #9E2024;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #9E2024;
+            margin-top: 15px;
+        }
+        .creator {
+            width: 900px;
+            min-height: 230px;
+            margin: -30px auto 50px;
+            padding: 20px;
+            border: 5px solid white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 25px;
+            color: #B41C28;
+        }
+        .creator img {
+            width: 800px;
+            height: 700px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        .fortune-box {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f4f9f6;
+            border: 2px dashed #b2d8c8;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .fortune-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #4a7c59;
+            margin-bottom: 8px;
+        }
+        #fortune-text {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            min-height: 35px;
+        }
+        .fortune-box button {
+            background-color: #76a08e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .fortune-box button:hover {
+            background-color: #5c8372;
+        }
+        .fortune-tip {
+            font-size: 10px !important;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+    </style>
 </head>
-
 <body>
-
     <div class="homepage">
-
         <!-- 왼쪽 프로필 -->
         <aside class="profile">
-
             <h3>MY PROFILE</h3>
-
             <div class="profile-image">
                 <img src="프로필사진.jpg" alt="프로필 사진">
             </div>
-
-            <p>
-                방명록 안쓰면 바보
-            </p>
-
-            <!-- 오늘의 운세 위젯 (프로필 밑 빈 공간) -->
+            <p>방명록 안쓰면 바보</p>
             <div class="fortune-box">
                 <div class="fortune-title">🔮 오늘의 랜덤 운세</div>
                 <div id="fortune-text">버튼을 눌러 운세를 확인해보세요!</div>
                 <button onclick="showFortune()">운세 뽑기</button>
                 <p class="fortune-tip">누를 때마다 바뀌니까 자기가 맘에 드는 거 나왔으면 멈추세용ㅋㅋ</p>
             </div>
-
         </aside>
 
         <!-- 가운데 메인 화면 -->
         <main class="content">
-
             <h2>공부하기 싫어서 만들었어요</h2>
-
             <div class="news">
                 <strong>새로운 글</strong><br>
                 · 오늘은 <span id="current-date"></span>
             </div>
-
-            <div class="miniroom-title">
-                Mini Room
-            </div>
-
+            <div class="miniroom-title">Mini Room</div>
             <div class="miniroom">
                 <img src="miniroom.gif" alt="미니룸">
             </div>
-
-            <div class="footer">
-                Copyright@ 어쩌구저쩌구
-            </div>
-
+            <div class="footer">Copyright@ 어쩌구저쩌구</div>
         </main>
 
         <!-- 오른쪽 메뉴 -->
@@ -291,7 +233,6 @@
             <a href="#">게시판</a>
             <a href="https://www.youtube.com/@lastforaday" target="_blank" class="youtube">▶ YouTube</a>
         </nav>
-
     </div>
 
     <!-- 만든이 영역 -->
@@ -303,24 +244,29 @@
 
     <!-- 자바스크립트 영역 -->
     <script>
-        // 접속한 사람의 기기 기준으로 오늘 날짜 자동 표시
         const today = new Date();
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const day = today.getDate();
-        document.getElementById("current-date").innerText = `${year}년 ${month}월 ${day}일`;
+        document.getElementById("current-date").innerText = year + "년 " + month + "월 " + day + "일";
 
-        // 기존 운세 배열 및 함수
         const fortunes = [
             "오늘은 공부를 안 해도 죄책감이 들지 않는 마법의 날! 😆",
             "뜻밖의 장소에서 맛있는 간식을 발견하게 될 거예요.",
             "오늘 풀던 문제는 시험에 꼭 나옵니다! (아마도?)",
             "잠깐의 낮잠이 온 세상의 피로를 싹 씻어줄 거예요.",
             "오늘은 뭘 해도 귀여움을 받는 대길의 날입니다 ✨",
-            "책상을 3분만 정리하면 엄청난 집중력이 솟아나요!",
+            "오늘 먹는 야식은 0kcal... 였으면 좋겠지만 살로 갑니다 🐷",
+            "누가 지갑 주웠으면 좋겠다고 생각하는 바로 그 일이 일어납니다!",
+            "침대에 누우면 1초 만에 기절하는 기적의 밤이 찾아와요 🛏️💤",
+            "공부는 내일부터! 오늘은 일단 귀여우니까 합격 ✨",
+            "거울을 보세요. 오늘 미모가 폭발해서 위험할 수 있습니다 💣",
+            "모르는 번호로 오는 전화는 받지 마세요. 행운이 도망갑니다!",
+            "오늘은 뭘 해도 다 잘 풀릴... 리가 없으니 마음을 비우세요 😌",
+            "갑자기 치킨이 먹고 싶다면 그것은 운명의 계시입니다."
             "누군가 맛있는 걸 사줄지도 몰라요. 지갑을 사수하세요!",
             "길 가다가 새똥 맞을 수도 있으니까 나가지 마세요잉",
-            "로또 사자!",
+            "로또 사자! 당첨되면 친구(안소영)에게 주면 두배가 될겨",
             "친구(안소영)에게 맛있는 걸 사주기 좋은 날이네요"
         ];
 
@@ -329,6 +275,5 @@
             document.getElementById("fortune-text").innerText = fortunes[randomIndex];
         }
     </script>
-
 </body>
 </html>
