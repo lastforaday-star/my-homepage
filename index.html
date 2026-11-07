@@ -205,14 +205,14 @@
             if (userChoice === currentQuiz.answer) {
                 // 맞췄을 때
                 resultDiv.style.color = "#4a7c59";
-                resultDiv.innerText = "✨ 반갑다 친구야 ✨";
+                resultDiv.innerText = "반갑다 친구야";
                 setTimeout(function() {
                     window.location.href = "main.html";
                 }, 1200);
             } else {
                 // 틀렸을 때
                 resultDiv.style.color = "#B41C28";
-                resultDiv.innerText = "❌ 다시 풀어보삼 😂";
+                resultDiv.innerText = "다시 풀어보삼";
                 setTimeout(function() {
                     loadRandomQuiz(); // 다른 문제로 자동 변경
                 }, 1200);
