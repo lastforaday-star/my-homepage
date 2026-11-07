@@ -156,7 +156,7 @@
     <div class="verify-box">
         <!-- 캐릭터 영역 및 말풍선 버튼 -->
         <div class="character-wrapper">
-            <button class="speech-bubble-btn" onclick="openQuiz()">친구 검증하고 들어오삼 👉</button>
+            <button class="speech-bubble-btn" onclick="openQuiz()">문제 풀고 들어오삼 👉</button>
             <img src="메인사진.jpg" class="entry-image" alt="입장하기" onclick="openQuiz()">
         </div>
     </div>
@@ -169,17 +169,17 @@
             <button class="ox-btn btn-x" onclick="checkAnswer('X')">X</button>
         </div>
         <div id="quiz-result"></div>
-        <button class="skip-btn" onclick="goToMain()">틀렸을 경우 걍 들어와 🚪</button>
+        <button class="skip-btn" onclick="goToMain()">귀찮으면 그냥 들어와...ㅇㅅㅇ 🚪</button>
     </div>
 
     <script>
         // O/X 퀴즈 5가지 데이터 (정답은 'O' 또는 'X')
         const quizzes = [
-            { q: "나는 공부가 너무너무 하고 싶어서 미니홈피를 만들었다?", answer: "X" },
-            { q: "내 홈페이지 주인장은 하루에 12시간씩 운동하는 헬스 마니아다?", answer: "X" },
-            { q: "방명록을 안 쓰면 바보가 된다는 게 이 홈피의 진실이다?", answer: "O" },
-            { q: "주인장은 세상에서 치킨보다 풀을 더 좋아한다?", answer: "X" },
-            { q: "이 홈페이지에 들어온 이상 당신은 이미 내 친구다?", answer: "O" }
+            { q: "안소영이 제일 좋아하는 게임은 철권이다.", answer: "O" },
+            { q: "안소영 키 170", answer: "O" },
+            { q: "안소영 몸무게 40", answer: "O" },
+            { q: "안소영은 치킨 보다 피자를 더 좋아한다.", answer: "X" },
+            { q: "안소영은 안경을 낀다.", answer: "O" }
         ];
 
         let currentQuiz = null;
@@ -205,14 +205,14 @@
             if (userChoice === currentQuiz.answer) {
                 // 맞췄을 때
                 resultDiv.style.color = "#4a7c59";
-                resultDiv.innerText = "✨ 반갑다 친구야! 미니홈피로 이동합니다 ✨";
+                resultDiv.innerText = "✨ 반갑다 친구야 ✨";
                 setTimeout(function() {
                     window.location.href = "main.html";
                 }, 1200);
             } else {
                 // 틀렸을 때
                 resultDiv.style.color = "#B41C28";
-                resultDiv.innerText = "❌ 틀렸어! 다시 풀어보삼 😂";
+                resultDiv.innerText = "❌ 다시 풀어보삼 😂";
                 setTimeout(function() {
                     loadRandomQuiz(); // 다른 문제로 자동 변경
                 }, 1200);
