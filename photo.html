@@ -3,6 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHOTO ALBUM</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
@@ -21,6 +22,7 @@
             max-width: 850px;
             margin: 30px auto;
             padding: 25px;
+        }
 
         h2 {
             color: #9E2024;
@@ -28,6 +30,13 @@
             font-size: 30px;
         }
 
+        .photo-notice {
+            text-align: center;
+            font-size: 30px;
+            margin: 20px auto;
+        }
+
+        /* 사진첩 목록 */
         .album-list {
             display: flex;
             gap: 20px;
@@ -38,20 +47,21 @@
         .album {
             width: 180px;
             height: 150px;
-            background:
-            border:
-            border-radius: 10px;
+            border-radius: 15px;
             text-align: center;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: center;
             font-size: 70px;
+            background: rgba(255,255,255,0.7);
         }
 
-
+        .album:hover {
+            transform: scale(1.05);
         }
 
+        /* 사진첩 내용 */
         .album-content {
             display: none;
             margin-top: 30px;
@@ -68,36 +78,50 @@
             margin: 15px 0;
         }
 
+        /* 사진 배열 */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 15px;
         }
 
-        .photo-item img {
+        /* 사진 크기 */
+        .photo-grid img {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
             border: 2px solid #C2E2DD;
-            border-radius: 5px;
+            border-radius: 10px;
+        }
+
+        .photo-item {
+            text-align: center;
         }
 
         .photo-item button {
             margin-top: 5px;
             cursor: pointer;
+            font-family: 'Single Day', sans-serif;
         }
 
+        /* 돌아가기 */
         .back {
             display: block;
             text-align: center;
             margin-top: 30px;
             color: #9E2024;
+            font-size: 22px;
         }
-        .photo-notice {
-    text-align: center;
-    font-size: 30px;
-    margin: 20px auto;
-}
+
+        @media (max-width: 600px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .photo-grid img {
+                height: 150px;
+            }
+        }
     </style>
 </head>
 
@@ -106,49 +130,85 @@
 <div class="photo-page">
 
     <h2>비밀 사진첩</h2>
+
     <p class="photo-notice">
-    올리고 새로고침하면 삭제되니까 맘껏 올리삼
-</p>
-    
+        올리고 새로고침하면 삭제되니까 맘껏 올리삼
+    </p>
 
-  
-<div class="album-list">
-    <div class="album" onclick="openAlbum('me')">
-        📷
+    <!-- 사진첩 목록 -->
+    <div class="album-list">
+
+        <div class="album" onclick="openAlbum('me')">
+            📷
+        </div>
+
+        <div class="album" onclick="openAlbum('heart')">
+            ❤️
+        </div>
+
     </div>
 
-    <div class="album" onclick="openAlbum('heart')">
-        ❤️
+    <!-- 카메라 사진첩 -->
+    <div id="me" class="album-content">
+
+        <h3>📷 나의 사진</h3>
+
+        <input type="file" accept="image/*" multiple
+            onchange="addPhotos(event, 'me')">
+
+        <div class="photo-grid" id="me-photos">
+
+            <div class="photo-item">
+                <img src="사진첩1.jpg" alt="나의 사진 1">
+            </div>
+
+            <div class="photo-item">
+                <img src="사진첩2.jpg" alt="나의 사진 2">
+            </div>
+
+            <div class="photo-item">
+                <img src="사진첩3.jpg" alt="나의 사진 3">
+            </div>
+
+        </div>
     </div>
+
+    <!-- 하트 사진첩 -->
+    <div id="heart" class="album-content">
+
+        <h3>❤️ 추억 사진</h3>
+
+        <input type="file" accept="image/*" multiple
+            onchange="addPhotos(event, 'heart')">
+
+        <div class="photo-grid" id="heart-photos">
+
+            <div class="photo-item">
+                <img src="사진첩4.jpg" alt="추억 사진 1">
+            </div>
+
+            <div class="photo-item">
+                <img src="사진첩5.jpg" alt="추억 사진 2">
+            </div>
+
+            <div class="photo-item">
+                <img src="사진첩6.jpg" alt="추억 사진 3">
+            </div>
+
+        </div>
+    </div>
+
+    <a href="main.html" class="back">
+        ← 미니홈피로 돌아가기
+    </a>
+
 </div>
-
-<!-- 카메라 사진첩 -->
-<div id="me" class="album-content">
-    <h3>📷 나의 사진</h3>
-
-    <div class="photo-grid">
-        <img src="사진첩1.jpg" alt="나의 사진 1">
-        <img src="사진첩2.jpg" alt="나의 사진 2">
-        <img src="사진첩3.jpg" alt="나의 사진 3">
-    </div>
-</div>
-
-<!-- 하트 사진첩 -->
-<div id="heart" class="album-content">
-    <h3>❤️ 추억 사진</h3>
-
-    <div class="photo-grid">
-        <img src="사진첩41.jpg" alt="추억 사진 1">
-        <img src="사진첩5.jpg" alt="추억 사진 2">
-        <img src="사진첩6.jpg" alt="추억 사진 3">
-    </div>
-</div
-
-<a href="main.html" class="back">← 미니홈피로 돌아가기</a>
-
 
 <script>
+
+    // 사진첩 열기
     function openAlbum(id) {
+
         document.querySelectorAll('.album-content').forEach(album => {
             album.style.display = 'none';
         });
@@ -156,15 +216,19 @@
         document.getElementById(id).style.display = 'block';
     }
 
+    // 사진 추가
     function addPhotos(event, album) {
+
         const files = Array.from(event.target.files);
 
         files.forEach(file => {
+
             if (!file.type.startsWith('image/')) return;
 
             const reader = new FileReader();
 
             reader.onload = function(e) {
+
                 const img = document.createElement('img');
                 img.src = e.target.result;
 
@@ -182,13 +246,16 @@
                 item.appendChild(button);
 
                 document.getElementById(album + '-photos').appendChild(item);
+
             };
 
             reader.readAsDataURL(file);
+
         });
 
         event.target.value = '';
     }
+
 </script>
 
 </body>
