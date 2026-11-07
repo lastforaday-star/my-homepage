@@ -130,7 +130,10 @@ async function loadGuestbook() {
             return;
         }
 
-        entries.reverse().forEach(entry => {
+        entries.
+    .filter(entry => entry.name && entry.message)
+    .reverse()
+    .forEach(entry => {
             const box = document.createElement("div");
             box.className = "entry";
 
