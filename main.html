@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>My Little Homepage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
+
+
+<style>
+    .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+    * {
+        box-sizing: border-box;
+    }
+
+body {
+    font-family: 'Single Day', sans-serif;
+
+    background-image: url("배경.gif");
+    background-repeat: repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+    /* 전체 미니홈피 */
+    .homepage {
+        width: 1000px;
+        min-height: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 190px 1fr 130px;
+        gap: 15px;
+        background: #C2E2DD;
+        border: 5px solid white;
+        border-radius: 25px;
+    }
+
+    /* 왼쪽 프로필 */
+    .profile {
+        background: white;
+        border: 2px solid #86BAAE;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .profile h3 {
+        font-size: 17px;
+        text-align: center;
+        color: #B41C28;
+    }
+
+    .profile-image {
+        width: 130px;
+        height: 130px;
+        margin: 15px auto;
+        background: #C2E2DD;
+        border: 2px dashed #86BAAE;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 45px;
+    }
+
+    .profile p {
+        font-size: 20px;
+        line-height: 1.8;
+    }
+
+    .visitor {
+        margin-top: 20px;
+        padding: 10px;
+        background: #C2E2DD;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    /* 가운데 콘텐츠 */
+    .content {
+        background: white;
+        border: 2px solid #86BAAE;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .content h2 {
+        color: #B41C28;
+        font-size: 17px;
+        border-bottom: 1px solid #86BAAE;
+        padding-bottom: 10px;
+    }
+
+    .news {
+        background: #C2E2DD;
+        border: 1px solid #86BAAE;
+        padding: 12px;
+        margin-bottom: 15px;
+        font-size: 17px;
+        line-height: 2;
+    }
+
+  .miniroom {
+    height: 280px;
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+}
+
+.miniroom img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.miniroom p {
+    font-size: 14px;
+    color: #9E2024;
+}
+
+    /* 오른쪽 메뉴 */
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .menu a {
+        display: block;
+        padding: 12px 5px;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        background: #86BAAE;
+        border: 1px solid #B41C28;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .menu a:hover {
+        background: #9CA123;
+    }
+
+    .menu .youtube {
+        background: #B41C28;
+    }
+
+    .menu .back {
+        background: #9E2024;
+    }
+
+    /* 하단 문구 */
+    .footer {
+        text-align: center;
+        font-size: 11px;
+        color: #9E2024;
+        margin-top: 15px;
+    }
+</style>
+
+</head>
+
+<body>
+
+    <div class="homepage">
+
+        <!-- 왼쪽 프로필 -->
+        <aside class="profile">
+
+            <h3>MY PROFILE</h3>
+
+           <div class="profile-image">
+    <img src="프로필사진.jpg" alt="프로필 사진">
+</div>
+
+            <p>
+                방명록 안쓰면 바보
+            </p>
+
+            <div class="visitor">
+                TODAY : 1234<br>
+                TOTAL : 12345
+            </div>
+
+        </aside>
+
+
+        <!-- 가운데 메인 화면 -->
+        <main class="content">
+
+            <h2>공부하기 싫어서 만들었어요</h2>
+
+            <div class="news">
+                <strong>새로운 글</strong><br>
+                · 오늘은 2026년 11월 7일
+            </div>
+
+            <div class="miniroom-title">
+                Mini Room
+            </div>
+
+            <div class="miniroom">
+                <div class="miniroom">
+    <img src="miniroom.gif" alt="미니룸">
+</div>
+            </div>
+
+            <div class="footer">
+                Copyright@ 어쩌구저쩌구
+            </div>
+
+        </main>
+
+
+        <!-- 오른쪽 메뉴 -->
+       
+<!-- 오른쪽 메뉴 -->
+<nav class="menu">
+
+    <a href="index.html" class="back">
+        처음으로
+    </a>
+
+    <a href="diary.html">
+        다이어리
+    </a>
+
+    <a href="photo.html">사진첩</a>
+
+    <a href="#">
+        방명록
+    </a>
+
+    <a href="#">
+        게시판
+    </a>
+
+    <a href="https://www.youtube.com/@lastforaday"
+       target="_blank"
+       class="youtube">
+        ▶ YouTube
+    </a>
+
+</nav>
+
+
+</body>
+</html>

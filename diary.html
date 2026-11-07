@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>My Diary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 15px;
+            background: #C2E2DD;
+            font-family: 'Single Day', sans-serif;
+            color: #555;
+        }
+
+        .diary {
+            max-width: 750px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border: 5px solid #B41C28;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px #9E2024;
+        }
+
+        h1 {
+            color: #B41C28;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #86BAAE;
+            margin-bottom: 30px;
+        }
+
+        /* 글쓰기 영역 */
+        .write-box {
+            padding: 20px;
+            background: #C2E2DD;
+            border: 2px solid #86BAAE;
+            border-radius: 12px;
+        }
+
+        .write-box h2 {
+            color: #9E2024;
+            font-size: 18px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #86BAAE;
+            border-radius: 7px;
+            font-family: 'Single Day', sans-serif;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 7px;
+            background: #B41C28;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #9E2024;
+        }
+
+        /* 게시글 목록 */
+        .post-section {
+            margin-top: 30px;
+        }
+
+        .post-section h2 {
+            color: #B41C28;
+            border-bottom: 2px solid #86BAAE;
+            padding-bottom: 10px;
+        }
+
+        .post {
+            margin-top: 15px;
+            padding: 18px;
+            border: 1px solid #86BAAE;
+            border-radius: 10px;
+            background: #f5fbf9;
+        }
+
+        .post h3 {
+            color: #9E2024;
+            margin-top: 0;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .post-content {
+            white-space: pre-wrap;
+            line-height: 1.7;
+        }
+
+        .delete-button {
+            background: #9CA123;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        .back {
+            display: block;
+            width: fit-content;
+            margin: 25px auto 0;
+            color: #B41C28;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="diary">
+
+        <h1>일기장</h1>
+        <p class="subtitle">방문자는 방명록에 써라!</p>
+
+        <!-- 글쓰기 -->
+        <div class="write-box">
+
+            <h2>오늘의 이야기</h2>
+
+            <input
+                type="text"
+                id="postTitle"
+                placeholder="제목을 입력하세요. (생각 안나면 날짜만 쓰세여)"
+            >
+
+            <textarea
+                id="postContent"
+                placeholder="오늘 있었던 일을 기록해 보세요."
+            ></textarea>
+
+            <button onclick="addPost()">게시글 저장</button>
+
+        </div>
+
+        <!-- 게시글 목록 -->
+        <div class="post-section">
+
+            <h2>나의 게시글</h2>
+
+            <div id="postList"></div>
+
+        </div>
+
+        <a href="main.html" class="back">
+            ← 미니홈피로 돌아가기
+        </a>
+
+    </div>
+
+    <script>
+
+        // 저장된 게시글 불러오기
+        let posts = JSON.parse(
+            localStorage.getItem("myDiaryPosts") || "[]"
+        );
+
+        // 게시글 저장
+        function addPost() {
+
+            const title = document.getElementById("postTitle").value.trim();
+            const content = document.getElementById("postContent").value.trim();
+
+            if (title === "" || content === "") {
+                alert("제목과 내용을 모두 입력해 주세요.");
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                date: new Date().toLocaleString("ko-KR")
+            };
+
+            posts.unshift(post);
+
+            localStorage.setItem(
+                "myDiaryPosts",
+                JSON.stringify(posts)
+            );
+
+            document.getElementById("postTitle").value = "";
+            document.getElementById("postContent").value = "";
+
+            showPosts();
+        }
+
+        // 게시글 화면에 표시
+        function showPosts() {
+
+            const postList = document.getElementById("postList");
+
+            postList.replaceChildren();
+
+            if (posts.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "empty";
+                empty.textContent = "아직 작성한 게시글이 없어요.";
+                postList.appendChild(empty);
+                return;
+            }
+
+            posts.forEach(function(post) {
+
+                const box = document.createElement("div");
+                box.className = "post";
+
+                const title = document.createElement("h3");
+                title.textContent = post.title;
+
+                const date = document.createElement("p");
+                date.className = "post-date";
+                date.textContent = post.date;
+
+                const content = document.createElement("p");
+                content.className = "post-content";
+                content.textContent = post.content;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete-button";
+                deleteButton.textContent = "삭제";
+
+                deleteButton.addEventListener("click", function() {
+                    deletePost(post.id);
+                });
+
+                box.append(title, date, content, deleteButton);
+                postList.appendChild(box);
+
+            });
+        }
+
+        // 게시글 삭제
+        function deletePost(id) {
+
+            if (!confirm("이 게시글을 삭제할까요?")) {
+                return;
+            }
+
+            posts = posts.filter(function(post) {
+                return post.id !== id;
+            });
+
+            localStorage.setItem(
+                "myDiaryPosts",
+                JSON.stringify(posts)
+            );
+
+            showPosts();
+        }
+
+        // 페이지를 열 때 게시글 표시
+        showPosts();
+
+    </script>
+
+</body>
+</html>
