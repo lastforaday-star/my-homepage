@@ -18,7 +18,6 @@ body {
     background-attachment: fixed;
     color: #9E2024;
 }
-
 .container {
     width: 700px;
     max-width: 90%;
@@ -28,12 +27,10 @@ body {
     border: 3px solid #86BAAE;
     border-radius: 10px;
 }
-
 h2 {
     text-align: center;
     color: #B41C28;
 }
-
 input, textarea {
     box-sizing: border-box;
     width: 100%;
@@ -44,12 +41,10 @@ input, textarea {
     font-family: inherit;
     font-size: 17px;
 }
-
 textarea {
     height: 100px;
     resize: vertical;
 }
-
 button {
     padding: 10px 20px;
     background: #86BAAE;
@@ -60,7 +55,6 @@ button {
     font-family: inherit;
     font-size: 17px;
 }
-
 .entry {
     background: #F3FAF8;
     border: 1px solid #C2E2DD;
@@ -70,13 +64,11 @@ button {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
-
 .entry-info {
     color: #9CA123;
     font-size: 14px;
     margin-bottom: 8px;
 }
-
 .back {
     display: block;
     text-align: center;
@@ -87,20 +79,18 @@ button {
 </head>
 
 <body>
-
 <div class="container">
 
     <h2>♥ 방명록 ♥</h2>
     <p style="text-align:center;">
-        끝에 "<ㅇㅇ이가>" 를 꼭 써주세여
+        끝에 "&lt;ㅇㅇ이가&gt;"를 꼭 써주세여
     </p>
 
     <input type="text" id="name" placeholder="이름을 입력하세요" maxlength="20">
-
     <textarea id="message" placeholder="방명록을 작성해 주세요." maxlength="500"></textarea>
 
     <div style="text-align:right;">
-        <button onclick="writeGuestbook()">등록하기</button>
+        <button id="submitButton" onclick="writeGuestbook()">등록하기</button>
     </div>
 
     <h3>📖 쓸 말 없으면 나를 칭찬하라</h3>
@@ -108,7 +98,6 @@ button {
     <div id="guestbookList">방명록을 불러오는 중...</div>
 
     <a href="main.html" class="back">← 미니홈피로 돌아가기</a>
-
 </div>
 
 <script>
@@ -116,24 +105,27 @@ const API_URL = "https://script.google.com/macros/s/AKfycbx3zCoO7JbyilCzwjXTng-B
 
 async function loadGuestbook() {
     const list = document.getElementById("guestbookList");
+    list.textContent = "방명록을 불러오는 중...";
 
     try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error();
+        const response = await fetch(API_URL + "?t=" + Date.now());
+        if (!response.ok) throw new Error("서버 응답 오류");
 
         const entries = await response.json();
+        if (!Array.isArray(entries)) throw new Error("데이터 형식 오류");
 
         list.innerHTML = "";
 
-        if (entries.length === 0) {
+        const validEntries = entries.filter(
+            entry => entry.name && entry.message
+        );
+
+        if (validEntries.length === 0) {
             list.textContent = "아직 작성된 방명록이 없어요.";
             return;
         }
 
-        entries.
-    .filter(entry => entry.name && entry.message)
-    .reverse()
-    .forEach(entry => {
+        validEntries.reverse().forEach(entry => {
             const box = document.createElement("div");
             box.className = "entry";
 
@@ -150,40 +142,48 @@ async function loadGuestbook() {
         });
 
     } catch (error) {
-        list.textContent = "방명록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.";
+        list.textContent = "방명록을 불러오지 못했어요. 다시 시도해 주세요.";
+        console.error("방명록 불러오기 오류:", error);
     }
 }
 
 async function writeGuestbook() {
     const name = document.getElementById("name").value.trim();
     const message = document.getElementById("message").value.trim();
+    const button = document.getElementById("submitButton");
 
     if (!name || !message) {
         alert("이름과 내용을 모두 입력해 주세요.");
         return;
     }
 
+    button.disabled = true;
+
     try {
-        const response = await fetch(API_URL, {
+        await fetch(API_URL, {
             method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
             body: JSON.stringify({ name, message })
         });
-
-        if (!response.ok) throw new Error();
 
         document.getElementById("name").value = "";
         document.getElementById("message").value = "";
 
-        alert("방명록이 등록되었습니다!");
-        loadGuestbook();
+        alert("등록 요청을 보냈어요. 목록을 새로 확인합니다.");
+        await loadGuestbook();
 
     } catch (error) {
-        alert("등록에 실패했어요. 잠시 후 다시 시도해 주세요.");
+        alert("등록 요청에 실패했어요. 다시 시도해 주세요.");
+        console.error(error);
+    } finally {
+        button.disabled = false;
     }
 }
 
 loadGuestbook();
 </script>
-
 </body>
 </html>
