@@ -22,7 +22,25 @@
             background-repeat: repeat;
             background-position: center;
             background-attachment: fixed;
+            position: relative;
         }
+
+        /* 왼쪽 바깥 공간에 띄울 아바타 GIF 스타일 */
+        .side-avatar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            text-align: center;
+            z-index: 10;
+        }
+        .side-avatar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .homepage {
             width: 1000px;
             min-height: 600px;
@@ -300,6 +318,12 @@
     </style>
 </head>
 <body>
+
+    <!-- 왼쪽 바깥 공간에 떠 있는 아바타 GIF -->
+    <div class="side-avatar">
+        <img src="왼쪽 아바타.gif" alt="어서오세요 아바타">
+    </div>
+
     <div class="homepage">
         <!-- 왼쪽 프로필 -->
         <aside class="profile">
@@ -365,174 +389,4 @@
         <div class="modal-content">
             <button class="modal-close" type="button" onclick="closeModal('card-game-modal')">&times;</button>
             <h3 style="color:#b44a59; margin-top:0;">🃏 카드 짝 맞추기</h3>
-            <div id="game-grid" class="game-grid"></div>
-            <button class="arcade-btn" type="button" onclick="startCardGame()">다시 섞기</button>
-            <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">카드를 뒤집어 짝을 맞춰보세요!</div>
-        </div>
-    </div>
-
-    <!-- 2. B게임 팝업창 -->
-    <div id="b-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" type="button" onclick="closeModal('b-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🎮 B게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" type="button" onclick="closeModal('b-game-modal')">닫기</button>
-        </div>
-    </div>
-
-    <!-- 3. C게임 팝업창 -->
-    <div id="c-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" type="button" onclick="closeModal('c-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🎯 C게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" type="button" onclick="closeModal('c-game-modal')">닫기</button>
-        </div>
-    </div>
-
-    <!-- 자바스크립트 영역 -->
-    <script>
-        // 날짜 출력 및 초기화
-        document.addEventListener("DOMContentLoaded", function() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            const dateElement = document.getElementById("current-date");
-            if (dateElement) {
-                dateElement.innerText = year + "년 " + month + "월 " + day + "일";
-            }
-        });
-
-        // 운세 데이터
-        const fortunes = [
-            "오늘은 공부를 안 해도 죄책감이 들지 않는 마법의 날! 😆",
-            "뜻밖의 장소에서 맛있는 간식을 발견하게 될 거예요.",
-            "오늘 풀던 문제는 시험에 꼭 나옵니다! (아마도?)",
-            "잠깐의 낮잠이 온 세상의 피로를 싹 씻어줄 거예요.",
-            "오늘은 뭘 해도 귀여움을 받는 대길의 날입니다 ✨",
-            "오늘 먹는 야식은 0kcal... 였으면 좋겠지만 살로 갑니다 🐷",
-            "누가 지갑 주웠으면 좋겠다고 생각하는 바로 그 일이 일어납니다!",
-            "침대에 누우면 1초 만에 기절하는 기적의 밤이 찾아와요 🛏️💤",
-            "공부는 내일부터! 오늘은 일단 귀여우니까 합격 ✨",
-            "거울을 보세요. 오늘 미모가 폭발해서 위험할 수 있습니다 💣",
-            "모르는 번호로 오는 전화는 받지 마세요. 행운이 도망갑니다!",
-            "오늘은 뭘 해도 다 잘 풀릴... 리가 없으니 마음을 비우세요 😌",
-            "갑자기 치킨이 먹고 싶다면 그것은 운명의 계시입니다.",
-            "누군가 맛있는 걸 사줄지도 몰라요. 지갑을 사수하세요!",
-            "길 가다가 새똥 맞을 수도 있으니까 나가지 마세요잉",
-            "로또 사자! 당첨되면 친구(안소영)에게 주면 두배가 될겨",
-            "친구(안소영)에게 맛있는 걸 사주기 좋은 날이네요"
-        ];
-
-        function showFortune() {
-            const randomIndex = Math.floor(Math.random() * fortunes.length);
-            const fortuneText = document.getElementById("fortune-text");
-            if (fortuneText) {
-                fortuneText.innerText = fortunes[randomIndex];
-            }
-        }
-
-        // 팝업 모달창 열기
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = "flex";
-                if (modalId === 'card-game-modal') {
-                    startCardGame();
-                }
-            }
-        }
-
-        // 팝업 모달창 닫기
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // 카드 짝 맞추기 게임 로직
-        const cardImages = [
-            "card1.jpg", "card2.jpg", "card3.jpg", "card4.jpg",
-            "card5.jpg", "card6.jpg", "card7.jpg", "card8.jpg"
-        ];
-
-        let flippedCards = [];
-        let matchedCount = 0;
-        let isLockBoard = false;
-
-        function startCardGame() {
-            const grid = document.getElementById("game-grid");
-            if (!grid) return;
-            grid.innerHTML = "";
-            flippedCards = [];
-            matchedCount = 0;
-            isLockBoard = false;
-            
-            const statusEl = document.getElementById("game-status");
-            if (statusEl) {
-                statusEl.innerText = "카드를 뒤집어 짝을 맞춰보세요!";
-            }
-
-            let deck = [...cardImages, ...cardImages];
-            deck.sort(() => Math.random() - 0.5);
-
-            deck.forEach((imgSrc) => {
-                const card = document.createElement("div");
-                card.classList.add("card");
-                card.dataset.image = imgSrc;
-
-                const img = document.createElement("img");
-                img.src = imgSrc;
-                img.alt = "카드 이미지";
-                card.appendChild(img);
-
-                card.addEventListener("click", flipCard);
-                grid.appendChild(card);
-            });
-        }
-
-        function flipCard() {
-            if (isLockBoard) return;
-            if (this === flippedCards[0]) return;
-            if (this.classList.contains("matched") || this.classList.contains("flipped")) return;
-
-            this.classList.add("flipped");
-            flippedCards.push(this);
-
-            if (flippedCards.length === 2) {
-                checkForMatch();
-            }
-        }
-
-        function checkForMatch() {
-            const [card1, card2] = flippedCards;
-            const isMatch = card1.dataset.image === card2.dataset.image;
-
-            if (isMatch) {
-                card1.classList.add("matched");
-                card2.classList.add("matched");
-                matchedCount += 2;
-                flippedCards = [];
-
-                if (matchedCount === 16) {
-                    const statusEl = document.getElementById("game-status");
-                    if (statusEl) {
-                        statusEl.innerText = "🎉 축하합니다! 다 맞췄어요! ✨";
-                    }
-                }
-            } else {
-                isLockBoard = true;
-                setTimeout(() => {
-                    card1.classList.remove("flipped");
-                    card2.classList.remove("flipped");
-                    flippedCards = [];
-                    isLockBoard = false;
-                }, 800);
-            }
-        }
-    </script>
-</body>
-</html>
+            <div id="game-grid" class="game-
