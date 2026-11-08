@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>미니룸 꾸미기 시뮬레이터</title>
+    <title>미니룸 꾸미기 시뮬레이터 (코드 구현형)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
         }
 
         .simulator-container {
-            width: 700px;
+            width: 720px;
             background: white;
             border: 4px solid #b44a59;
             border-radius: 20px;
@@ -34,47 +34,65 @@
         h2 {
             color: #b44a59;
             margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        #guide-text {
+            font-size: 13px;
+            color: #666;
             margin-bottom: 15px;
         }
 
-        /* 미니룸 배경 화면 */
+        /* 미니룸 배경 화면 (순수 CSS와 그라데이션으로 싸이월드 감성 룸 구현) */
         .room-viewport {
             position: relative;
-            width: 640px;
-            height: 320px;
+            width: 660px;
+            height: 340px;
             margin: 0 auto 20px auto;
             border: 3px solid #86BAAE;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            background-image: url("다운로드 (1).gif"); /* 마지막 5번째 사진 기본 배경 */
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #f4f9f6 0%, #e2f0eb 100%);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        /* 배치된 가구 아이템 스타일 */
+        /* 방의 바닥과 벽 느낌을 주는 격자 무늬 배경 선 */
+        .room-viewport::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(#b2d8c8 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.4;
+        }
+
+        /* 미니룸에 배치된 가구 아이템 스타일 */
         .placed-item {
             position: absolute;
             cursor: pointer;
             transform: translate(-50%, -50%);
+            font-size: 38px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            border: 1px dashed #b44a59;
+            user-select: none;
             transition: transform 0.1s;
-        }
-        .placed-item img {
-            width: 60px;
-            height: auto;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.3));
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.15));
         }
         .placed-item:hover {
-            transform: translate(-50%, -50%) scale(1.1);
+            transform: translate(-50%, -50%) scale(1.15);
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        /* 가구 팔레트 (선택 가능한 가구 10개) */
+        /* 가구 선택 팔레트 (코드 내부 이모지/심볼로 가구 10개 구성) */
         .furniture-palette {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             background: #fcf4f6;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 2px dashed #e8b4bc;
             margin-bottom: 15px;
         }
@@ -92,21 +110,16 @@
             background: #f8c8d0;
             transform: translateY(-3px);
         }
-        .furniture-card img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
+        .furniture-icon {
+            font-size: 28px;
             margin-bottom: 4px;
+            display: block;
         }
         .furniture-name {
             font-size: 11px;
             color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        /* 조작 버튼 영역 */
         .controls {
             display: flex;
             justify-content: center;
@@ -132,70 +145,61 @@
         .back-btn:hover {
             background-color: #5c8372;
         }
-
-        #guide-text {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
 
     <div class="simulator-container">
         <h2>✨ 나만의 미니룸 꾸미기 시뮬레이터 ✨</h2>
-        <div id="guide-text">아래 가구를 클릭하면 미니룸 중앙에 배치됩니다! (배치된 가구를 누르면 삭제돼요)</div>
+        <div id="guide-text">아래 가구를 클릭하여 선택한 뒤 미니룸 안을 클릭해 배치하세요! (배치된 가구를 클릭하면 삭제돼요)</div>
 
-        <!-- 미니룸 배경 영역 -->
-        <div id="room-viewport" class="room-viewport" onclick="placeFurniture(event)">
-            <!-- 가구들이 동적으로 여기에 추가됩니다 -->
-        </div>
+        <!-- 미니룸 배경 화면 (코드 단독 구현) -->
+        <div id="room-viewport" class="room-viewport" onclick="placeFurniture(event)"></div>
 
-        <!-- 10가지 가구 팔레트 (참고 이미지 기반 도트 아이템) -->
+        <!-- 가구 선택 팔레트 (10가지 도트 감성 가구 아이템) -->
         <div class="furniture-palette">
-            <div class="furniture-card" onclick="selectFurniture('card1.jpg', '전화테이블')">
-                <img src="card1.jpg" alt="전화테이블">
-                <div class="furniture-name">전화테이블</div>
+            <div class="furniture-card" onclick="selectFurniture('☕', '체크 식탁세트')">
+                <span class="furniture-icon">☕</span>
+                <div class="furniture-name">식탁세트</div>
             </div>
-            <div class="furniture-card" onclick="selectFurniture('card2.jpg', '핑크소파')">
-                <img src="card2.jpg" alt="핑크소파">
+            <div class="furniture-card" onclick="selectFurniture('🛋️', '핑크 소파')">
+                <span class="furniture-icon">🛋️</span>
                 <div class="furniture-name">핑크소파</div>
             </div>
-            <div class="furniture-card" onclick="selectFurniture('card3.jpg', '러블리 피팅')">
-                <img src="card3.jpg" alt="러블리 피팅">
-                <div class="furniture-name">러블리 피팅</div>
+            <div class="furniture-card" onclick="selectFurniture('🛏️', '체크 침대')">
+                <span class="furniture-icon">🛏️</span>
+                <div class="furniture-name">모던침대</div>
             </div>
-            <div class="furniture-card" onclick="selectFurniture('card4.jpg', '와인탁자')">
-                <img src="card4.jpg" alt="와인탁자">
-                <div class="furniture-name">와인탁자</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card5.jpg', '봄빛담은벤치')">
-                <img src="card5.jpg" alt="봄빛담은벤치">
-                <div class="furniture-name">봄빛벤치</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card6.jpg', '화이트모던소파')">
-                <img src="card6.jpg" alt="화이트소파">
-                <div class="furniture-name">화이트소파</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card7.jpg', '상큼한의자')">
-                <img src="card7.jpg" alt="상큼한의자">
-                <div class="furniture-name">상큼한의자</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card8.jpg', '공주왕자테이블')">
-                <img src="card8.jpg" alt="공주테이블">
-                <div class="furniture-name">공주테이블</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card1.jpg', '싱글모던침대')">
-                <img src="card1.jpg" alt="싱글모던침대">
-                <div class="furniture-name">싱글침대</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('card2.jpg', '모던책상세트')">
-                <img src="card2.jpg" alt="모던책상세트">
+            <div class="furniture-card" onclick="selectFurniture('💻', '노트북 책상')">
+                <span class="furniture-icon">💻</span>
                 <div class="furniture-name">책상세트</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('🪴', '초록이 화분')">
+                <span class="furniture-icon">🪴</span>
+                <div class="furniture-name">실내화분</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('🪞', '공주 화장대')">
+                <span class="furniture-icon">🪞</span>
+                <div class="furniture-name">화장대</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('🧸', '왕곰돌이 인형')">
+                <span class="furniture-icon">🧸</span>
+                <div class="furniture-name">곰인형</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('📚', '책장 수납장')">
+                <span class="furniture-icon">📚</span>
+                <div class="furniture-name">책장</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('💡', '스탠드 조명')">
+                <span class="furniture-icon">💡</span>
+                <div class="furniture-name">조명</div>
+            </div>
+            <div class="furniture-card" onclick="selectFurniture('📻', '레트로 라디오')">
+                <span class="furniture-icon">📻</span>
+                <div class="furniture-name">라디오</div>
             </div>
         </div>
 
-        <!-- 하단 버튼 -->
         <div class="controls">
             <button class="action-btn" onclick="clearRoom()">전체 초기화</button>
             <button class="action-btn back-btn" onclick="location.href='main.html'">미니홈피로 돌아가기</button>
@@ -203,17 +207,15 @@
     </div>
 
     <script>
-        let selectedImg = null;
+        let selectedSymbol = null;
 
-        // 가구 선택하기
-        function selectFurniture(imgSrc, name) {
-            selectedImg = imgSrc;
+        function selectFurniture(symbol, name) {
+            selectedSymbol = symbol;
             document.getElementById("guide-text").innerText = `선택된 가구: [${name}] 👉 미니룸 안을 클릭하여 배치하세요!`;
         }
 
-        // 미니룸 내부를 클릭했을 때 해당 위치에 가구 배치
         function placeFurniture(event) {
-            if (!selectedImg) {
+            if (!selectedSymbol) {
                 alert("먼저 아래 목록에서 배치할 가구를 선택해주세요!");
                 return;
             }
@@ -221,34 +223,28 @@
             const viewport = document.getElementById("room-viewport");
             const rect = viewport.getBoundingClientRect();
             
-            // 클릭한 상대 좌표 계산 (퍼센트 또는 픽셀)
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            // 가구 엘리먼트 생성
             const item = document.createElement("div");
             item.classList.add("placed-item");
             item.style.left = x + "px";
             item.style.top = y + "px";
+            item.innerText = selectedSymbol;
 
-            const img = document.createElement("img");
-            img.src = selectedImg;
-            item.appendChild(img);
-
-            // 배치된 가구를 클릭하면 삭제되도록 설정
+            // 배치된 가구를 클릭하면 삭제
             item.addEventListener("click", function(e) {
-                e.stopPropagation(); // 배경 클릭 이벤트 전파 방지
+                e.stopPropagation();
                 item.remove();
             });
 
             viewport.appendChild(item);
         }
 
-        // 전체 초기화
         function clearRoom() {
             const viewport = document.getElementById("room-viewport");
             viewport.innerHTML = "";
-            selectedImg = null;
+            selectedSymbol = null;
             document.getElementById("guide-text").innerText = "가구를 초기화했습니다. 가구를 다시 선택해주세요!";
         }
     </script>
