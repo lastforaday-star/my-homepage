@@ -192,7 +192,7 @@
             line-height: 1.2;
         }
 
-        /* 게임 오락실 메뉴 박스 */
+        /* 미니 오락실 메뉴 박스 */
         .arcade-box {
             margin-top: 15px;
             padding: 10px;
@@ -229,7 +229,7 @@
 
         /* 팝업 모달창 공통 스타일 */
         .modal-overlay {
-            display: none; /* 평소엔 숨김 */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
@@ -311,84 +311,4 @@
             
             <!-- 오늘의 운세 위젯 -->
             <div class="fortune-box">
-                <div class="fortune-title">🔮 오늘의 랜덤 운세</div>
-                <div id="fortune-text">버튼을 눌러 운세를 확인해보세요!</div>
-                <button onclick="showFortune()">운세 뽑기</button>
-                <p class="fortune-tip">누를 때마다 바뀌니까 자기가 맘에 드는 거 나왔으면 멈추세용ㅋㅋ</p>
-            </div>
-
-            <!-- 미니 오락실 게임 메뉴 버튼들 -->
-            <div class="arcade-box">
-                <div class="arcade-title">🕹️ 미니 오락실</div>
-                <div class="arcade-btn-group">
-                    <button class="arcade-btn" onclick="openModal('card-game-modal')">[카드 짝 맞추기 게임]</button>
-                    <button class="arcade-btn" onclick="openModal('b-game-modal')">[B게임]</button>
-                    <button class="arcade-btn" onclick="openModal('c-game-modal')">[C게임]</button>
-                </div>
-            </div>
-        </aside>
-
-        <!-- 가운데 메인 화면 -->
-        <main class="content">
-            <h2>공부하기 싫어서 만들었어요</h2>
-            <div class="news">
-                <strong>오늘은?</strong><br>
-                · <span id="current-date"></span>
-            </div>
-            <div class="miniroom-title">Mini Room</div>
-            <div class="miniroom">
-                <img src="miniroom.gif" alt="미니룸">
-            </div>
-            <div class="footer">Copyright@ 어쩌구저쩌구</div>
-        </main>
-
-        <!-- 오른쪽 메뉴 -->
-        <nav class="menu">
-            <a href="index.html" class="back">처음으로</a>
-            <a href="diary.html">다이어리</a>
-            <a href="photo.html">사진첩</a>
-            <a href="guestbook.html">방명록</a>
-            <a href="#">게시판</a>
-            <a href="https://www.youtube.com/@lastforaday" target="_blank" class="youtube">▶ YouTube</a>
-        </nav>
-    </div>
-
-    <!-- 만든이 영역 -->
-    <section class="creator">
-        <span>만든이</span>
-        <span>👉</span>
-        <img src="만든이 사진.JPG" alt="만든이 사진">
-    </section>
-
-    <!-- 1. 카드 짝 맞추기 게임 팝업창 -->
-    <div id="card-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('card-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🃏 카드 짝 맞추기</h3>
-            <div id="game-grid" class="game-grid"></div>
-            <button class="arcade-btn" onclick="startCardGame()">다시 섞기</button>
-            <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">카드를 뒤집어 짝을 맞춰보세요!</div>
-        </div>
-    </div>
-
-    <!-- 2. B게임 팝업창 -->
-    <div id="b-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('b-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🎮 B게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" onclick="closeModal('b-game-modal')">닫기</button>
-        </div>
-    </div>
-
-    <!-- 3. C게임 팝업창 -->
-    <div id="c-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('c-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🎯 C게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" onclick="closeModal('c-game-modal')">닫기</button>
-        </div>
-    </div>
-
-    <!-- 자바스크
+                <div class="fortune-
