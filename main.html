@@ -98,10 +98,6 @@
             object-fit: contain;
             display: block;
         }
-        .miniroom p {
-            font-size: 14px;
-            color: #9E2024;
-        }
         .menu {
             display: flex;
             flex-direction: column;
@@ -153,6 +149,8 @@
             object-fit: cover;
             border-radius: 15px;
         }
+
+        /* 운세 위젯 스타일 */
         .fortune-box {
             margin-top: 15px;
             padding: 10px;
@@ -194,8 +192,8 @@
             line-height: 1.2;
         }
 
-        /* 카드 짝 맞추기 게임 위젯 스타일 */
-        .game-box {
+        /* 게임 오락실 메뉴 박스 (버튼 목록) */
+        .arcade-box {
             margin-top: 15px;
             padding: 10px;
             background-color: #fcf4f6;
@@ -203,21 +201,80 @@
             border-radius: 8px;
             text-align: center;
         }
-        .game-title {
+        .arcade-title {
             font-size: 14px;
             font-weight: bold;
             color: #b44a59;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
+        .arcade-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .arcade-btn {
+            background-color: #d97987;
+            color: white;
+            border: none;
+            padding: 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Single Day', sans-serif;
+            transition: background 0.2s;
+        }
+        .arcade-btn:hover {
+            background-color: #b44a59;
+        }
+
+        /* 팝업 모달창 공통 스타일 */
+        .modal-overlay {
+            display: none; /* 평소엔 숨김 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* 뒷배경 어둡게 */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #b44a59;
+            width: 320px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-close:hover {
+            color: #B41C28;
+        }
+
+        /* 카드 게임 내부 그리드 스타일 */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
-            margin-bottom: 8px;
+            gap: 6px;
+            margin: 15px 0;
         }
         .card {
-            width: 38px;
-            height: 38px;
+            width: 55px;
+            height: 55px;
             background-color: #f8c8d0;
             border: 2px solid white;
             border-radius: 6px;
@@ -226,7 +283,6 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: transform 0.2s;
         }
         .card img {
             width: 100%;
@@ -239,24 +295,6 @@
         }
         .card.flipped, .card.matched {
             background-color: white;
-        }
-        .game-btn {
-            background-color: #d97987;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-            font-family: 'Single Day', sans-serif;
-        }
-        .game-btn:hover {
-            background-color: #b44a59;
-        }
-        #game-status {
-            font-size: 11px;
-            color: #555;
-            margin-top: 4px;
         }
     </style>
 </head>
@@ -278,12 +316,14 @@
                 <p class="fortune-tip">누를 때마다 바뀌니까 자기가 맘에 드는 거 나왔으면 멈추세용ㅋㅋ</p>
             </div>
 
-            <!-- 카드 짝 맞추기 게임 위젯 -->
-            <div class="game-box">
-                <div class="game-title">🃏 카드 짝 맞추기</div>
-                <div id="game-grid" class="game-grid"></div>
-                <button class="game-btn" onclick="startGame()">게임 시작 / 다시하기</button>
-                <div id="game-status">카드를 뒤집어 짝을 맞춰보세요!</div>
+            <!-- 미니 오락실 게임 메뉴 버튼들 -->
+            <div class="arcade-box">
+                <div class="arcade-title">🕹️ 미니 오락실</div>
+                <div class="arcade-btn-group">
+                    <button class="arcade-btn" onclick="openModal('card-game-modal')">[카드 짝 맞추기 게임]</button>
+                    <button class="arcade-btn" onclick="openModal('b-game-modal')">[B게임]</button>
+                    <button class="arcade-btn" onclick="openModal('c-game-modal')">[C게임]</button>
+                </div>
             </div>
         </aside>
 
@@ -319,9 +359,40 @@
         <img src="만든이 사진.JPG" alt="만든이 사진">
     </section>
 
+    <!-- 1. 카드 짝 맞추기 게임 팝업창 -->
+    <div id="card-game-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('card-game-modal')">&times;</button>
+            <h3 style="color:#b44a59; margin-top:0;">🃏 카드 짝 맞추기</h3>
+            <div id="game-grid" class="game-grid"></div>
+            <button class="arcade-btn" onclick="startCardGame()">다시 섞기</button>
+            <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">카드를 뒤집어 짝을 맞춰보세요!</div>
+        </div>
+    </div>
+
+    <!-- 2. B게임 팝업창 (나중에 원하시는 내용으로 채우시면 됩니다!) -->
+    <div id="b-game-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('b-game-modal')">&times;</button>
+            <h3 style="color:#b44a59; margin-top:0;">🎮 B게임</h3>
+            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째로 넣고 싶은 게임이나 콘텐츠를 만들 수 있어요!</p>
+            <button class="arcade-btn" onclick="closeModal('b-game-modal')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 3. C게임 팝업창 (나중에 원하시는 내용으로 채우시면 됩니다!) -->
+    <div id="c-game-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('c-game-modal')">&times;</button>
+            <h3 style="color:#b44a59; margin-top:0;">🎯 C게임</h3>
+            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째로 넣고 싶은 게임이나 콘텐츠를 만들 수 있어요!</p>
+            <button class="arcade-btn" onclick="closeModal('c-game-modal')">닫기</button>
+        </div>
+    </div>
+
     <!-- 자바스크립트 영역 -->
     <script>
-        // 페이지가 완전히 로드된 후 실행되도록 안전하게 감싸기
+        // 오늘 날짜 표시
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
             const year = today.getFullYear();
@@ -329,112 +400,3 @@
             const day = today.getDate();
             const dateElement = document.getElementById("current-date");
             if (dateElement) {
-                dateElement.innerText = year + "년 " + month + "월 " + day + "일";
-            }
-            startGame(); // 게임도 페이지 로드 시 자동 초기화
-        });
-
-        const fortunes = [
-            "오늘은 공부를 안 해도 죄책감이 들지 않는 마법의 날! 😆",
-            "뜻밖의 장소에서 맛있는 간식을 발견하게 될 거예요.",
-            "오늘 풀던 문제는 시험에 꼭 나옵니다! (아마도?)",
-            "잠깐의 낮잠이 온 세상의 피로를 싹 씻어줄 거예요.",
-            "오늘은 뭘 해도 귀여움을 받는 대길의 날입니다 ✨",
-            "오늘 먹는 야식은 0kcal... 였으면 좋겠지만 살로 갑니다 🐷",
-            "누가 지갑 주웠으면 좋겠다고 생각하는 바로 그 일이 일어납니다!",
-            "침대에 누우면 1초 만에 기절하는 기적의 밤이 찾아와요 🛏️💤",
-            "공부는 내일부터! 오늘은 일단 귀여우니까 합격 ✨",
-            "거울을 보세요. 오늘 미모가 폭발해서 위험할 수 있습니다 💣",
-            "모르는 번호로 오는 전화는 받지 마세요. 행운이 도망갑니다!",
-            "오늘은 뭘 해도 다 잘 풀릴... 리가 없으니 마음을 비우세요 😌",
-            "갑자기 치킨이 먹고 싶다면 그것은 운명의 계시입니다.",
-            "누군가 맛있는 걸 사줄지도 몰라요. 지갑을 사수하세요!",
-            "길 가다가 새똥 맞을 수도 있으니까 나가지 마세요잉",
-            "로또 사자! 당첨되면 친구(안소영)에게 주면 두배가 될겨",
-            "친구(안소영)에게 맛있는 걸 사주기 좋은 날이네요"
-        ];
-
-        function showFortune() {
-            const randomIndex = Math.floor(Math.random() * fortunes.length);
-            const fortuneText = document.getElementById("fortune-text");
-            if (fortuneText) {
-                fortuneText.innerText = fortunes[randomIndex];
-            }
-        }
-
-        // --- 카드 짝 맞추기 게임 로직 ---
-        const cardImages = [
-            "card1.jpg", "card2.jpg", "card3.jpg", "card4.jpg",
-            "card5.jpg", "card6.jpg", "card7.jpg", "card8.jpg"
-        ];
-
-        let flippedCards = [];
-        let matchedCount = 0;
-        let isLockBoard = false;
-
-        function startGame() {
-            const grid = document.getElementById("game-grid");
-            if (!grid) return;
-            grid.innerHTML = "";
-            flippedCards = [];
-            matchedCount = 0;
-            isLockBoard = false;
-            document.getElementById("game-status").innerText = "카드를 뒤집어 짝을 맞춰보세요!";
-
-            let deck = [...cardImages, ...cardImages];
-            deck.sort(() => Math.random() - 0.5);
-
-            deck.forEach((imgSrc) => {
-                const card = document.createElement("div");
-                card.classList.add("card");
-                card.dataset.image = imgSrc;
-
-                const img = document.createElement("img");
-                img.src = imgSrc;
-                img.alt = "카드 이미지";
-                card.appendChild(img);
-
-                card.addEventListener("click", flipCard);
-                grid.appendChild(card);
-            });
-        }
-
-        function flipCard() {
-            if (isLockBoard) return;
-            if (this === flippedCards[0]) return;
-            if (this.classList.contains("matched") || this.classList.contains("flipped")) return;
-
-            this.classList.add("flipped");
-            flippedCards.push(this);
-
-            if (flippedCards.length === 2) {
-                checkForMatch();
-            }
-        }
-
-        function checkForMatch() {
-            const [card1, card2] = flippedCards;
-            const isMatch = card1.dataset.image === card2.dataset.image;
-
-            if (isMatch) {
-                card1.classList.add("matched");
-                card2.classList.add("matched");
-                matchedCount += 2;
-                flippedCards = [];
-
-                if (matchedCount === 16) {
-                    document.getElementById("game-status").innerText = "🎉 축하합니다! 다 맞췄어요! ✨";
-                }
-            } else {
-                isLockBoard = true;
-                setTimeout(() => {
-                    card1.classList.remove("flipped");
-                    card2.classList.remove("flipped");
-                    flippedCards = [];
-                    isLockBoard = false;
-                }, 800);
-            }
-        }
-    </script>
-</body>
-</html>
