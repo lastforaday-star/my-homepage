@@ -1,252 +1,866 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>미니룸 꾸미기 시뮬레이터 (코드 구현형)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Single Day', sans-serif;
-            background-color: #fff0f5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Mini Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
-        .simulator-container {
-            width: 720px;
-            background: white;
-            border: 4px solid #b44a59;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            text-align: center;
-        }
+<style>
+* { box-sizing: border-box; }
 
-        h2 {
-            color: #b44a59;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
+body {
+    margin: 0;
+    padding: 30px 15px;
+    background: #f7e9e7;
+    font-family: 'Jua', sans-serif;
+    color: #715b58;
+}
 
-        #guide-text {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 15px;
-        }
+.container {
+    max-width: 950px;
+    margin: auto;
+    background: #fffaf5;
+    padding: 25px;
+    border: 5px solid #d9b5aa;
+    border-radius: 15px;
+    box-shadow: 5px 7px 0 #c9a39b;
+}
 
-        /* 미니룸 배경 화면 (순수 CSS와 그라데이션으로 싸이월드 감성 룸 구현) */
-        .room-viewport {
-            position: relative;
-            width: 660px;
-            height: 340px;
-            margin: 0 auto 20px auto;
-            border: 3px solid #86BAAE;
-            border-radius: 12px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f4f9f6 0%, #e2f0eb 100%);
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.05);
-        }
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        /* 방의 바닥과 벽 느낌을 주는 격자 무늬 배경 선 */
-        .room-viewport::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#b2d8c8 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.4;
-        }
+header h1 {
+    font-size: 29px;
+    color: #b77f83;
+    margin: 5px;
+}
 
-        /* 미니룸에 배치된 가구 아이템 스타일 */
-        .placed-item {
-            position: absolute;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            font-size: 38px;
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            border: 1px dashed #b44a59;
-            user-select: none;
-            transition: transform 0.1s;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.15));
-        }
-        .placed-item:hover {
-            transform: translate(-50%, -50%) scale(1.15);
-            background: rgba(255, 255, 255, 0.95);
-        }
+header p {
+    font-size: 13px;
+    color: #ad9290;
+}
 
-        /* 가구 선택 팔레트 (코드 내부 이모지/심볼로 가구 10개 구성) */
-        .furniture-palette {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            background: #fcf4f6;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px dashed #e8b4bc;
-            margin-bottom: 15px;
-        }
+/* 미니룸 */
 
-        .furniture-card {
-            background: white;
-            border: 2px solid #e8b4bc;
-            border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
-        }
-        .furniture-card:hover {
-            background: #f8c8d0;
-            transform: translateY(-3px);
-        }
-        .furniture-icon {
-            font-size: 28px;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .furniture-name {
-            font-size: 11px;
-            color: #333;
-        }
+.room {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 760 / 430;
+    overflow: hidden;
+    border: 5px solid #d4b5a3;
+    background: #f5e5d8;
+    box-shadow: inset 0 0 10px #c7a998;
+    touch-action: none;
+}
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .action-btn {
-            background-color: #d97987;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            font-family: 'Single Day', sans-serif;
-            transition: background 0.2s;
-        }
-        .action-btn:hover {
-            background-color: #b44a59;
-        }
-        .back-btn {
-            background-color: #86BAAE;
-        }
-        .back-btn:hover {
-            background-color: #5c8372;
-        }
-    </style>
+/* 벽 */
+
+.wall {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 69%;
+    background-color: #f6e9dc;
+    background-image:
+        linear-gradient(#ead8c9 1px, transparent 1px),
+        linear-gradient(90deg, #ead8c9 1px, transparent 1px);
+    background-size: 45px 45px;
+}
+
+/* 바닥 */
+
+.floor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 31%;
+    background-color: #d9b69a;
+    background-image:
+        linear-gradient(#c59e82 2px, transparent 2px),
+        linear-gradient(90deg, #c59e82 1px, transparent 1px);
+    background-size: 100% 28px, 95px 100%;
+    border-top: 7px solid #c49e83;
+}
+
+/* 창문 */
+
+.window {
+    position: absolute;
+    top: 7%;
+    left: 36%;
+    width: 28%;
+    height: 39%;
+    background: #c5e4e5;
+    border: 9px solid #fffaf0;
+    box-shadow: 0 0 0 3px #c8a58d;
+}
+
+.window::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 5px;
+    height: 100%;
+    background: #fffaf0;
+}
+
+.window::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #fffaf0;
+}
+
+.curtain {
+    position: absolute;
+    top: -5px;
+    width: 19%;
+    height: 110%;
+    background: repeating-linear-gradient(
+        90deg, #e9aeb2 0 8px, #f5c9c9 8px 16px
+    );
+    z-index: 2;
+}
+
+.curtain.left { left: -12%; }
+.curtain.right { right: -12%; }
+
+/* 햇살 */
+
+.sunlight {
+    position: absolute;
+    top: 46%;
+    left: 34%;
+    width: 33%;
+    height: 20%;
+    background: linear-gradient(
+        110deg, transparent, rgba(255,238,190,.4), transparent
+    );
+    pointer-events: none;
+}
+
+/* 벽 장식 */
+
+.wall-decoration {
+    position: absolute;
+    top: 17%;
+    left: 9%;
+    width: 12%;
+    padding: 8px;
+    text-align: center;
+    background: #fffaf0;
+    border: 5px solid #bd9580;
+    font-size: clamp(8px, 1.4vw, 15px);
+    color: #b67e82;
+    transform: rotate(-4deg);
+}
+
+.wall-clock {
+    position: absolute;
+    top: 15%;
+    right: 10%;
+    width: 9%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff9ed;
+    border: 5px solid #c89e84;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(10px, 2vw, 20px);
+}
+
+/* 러그 */
+
+.rug {
+    position: absolute;
+    width: 40%;
+    height: 23%;
+    bottom: 3%;
+    left: 30%;
+    border-radius: 50%;
+    background: #e9b7b1;
+    border: 5px dashed #f8ddd2;
+    box-shadow: inset 0 0 0 7px #dfaaa6;
+    pointer-events: none;
+}
+
+/* 배치 가구 */
+
+.placed-item {
+    position: absolute;
+    width: 17%;
+    min-width: 40px;
+    cursor: grab;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    touch-action: none;
+    user-select: none;
+    z-index: 5;
+}
+
+.placed-item svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    shape-rendering: crispEdges;
+    pointer-events: none;
+}
+
+.placed-item.selected {
+    outline: 2px dashed #c77d88;
+    outline-offset: 4px;
+}
+
+.placed-item:active {
+    cursor: grabbing;
+}
+
+/* 가구 선택 */
+
+.section-title {
+    margin: 22px 0 10px;
+    font-size: 18px;
+    color: #a97677;
+}
+
+.palette {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 9px;
+    padding: 13px;
+    background: #f8eae5;
+    border: 2px dashed #dbb5aa;
+    border-radius: 10px;
+}
+
+.card {
+    border: 2px solid #ecd2ca;
+    border-radius: 9px;
+    background: #fffdf9;
+    padding: 7px 3px;
+    text-align: center;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.card:hover, .card.active {
+    background: #f4d7d3;
+    border-color: #c98d91;
+    transform: translateY(-3px);
+}
+
+.card svg {
+    width: 65px;
+    height: 60px;
+    shape-rendering: crispEdges;
+}
+
+.card span {
+    display: block;
+    font-size: 12px;
+}
+
+/* 조작 버튼 */
+
+.editor {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 12px;
+    background: #fff1ed;
+    border-radius: 10px;
+}
+
+.editor-label {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+button {
+    font-family: 'Jua', sans-serif;
+    border: 0;
+    border-radius: 7px;
+    padding: 9px 13px;
+    background: #d99b9e;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+button:hover {
+    background: #bc777e;
+}
+
+button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+button.secondary {
+    background: #a9bdb0;
+}
+
+button.secondary:hover {
+    background: #829e8d;
+}
+
+.guide {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: #ae8984;
+    min-height: 20px;
+}
+
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: #b99a91;
+    margin-top: 18px;
+}
+
+@media(max-width: 600px) {
+    .container { padding: 12px; }
+    header h1 { font-size: 22px; }
+    .palette { grid-template-columns: repeat(3, 1fr); }
+    .editor { justify-content: center; }
+    button { padding: 8px 10px; }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="simulator-container">
-        <h2>✨ 나만의 미니룸 꾸미기 시뮬레이터 ✨</h2>
-        <div id="guide-text">아래 가구를 클릭하여 선택한 뒤 미니룸 안을 클릭해 배치하세요! (배치된 가구를 클릭하면 삭제돼요)</div>
+<div class="container">
 
-        <!-- 미니룸 배경 화면 (코드 단독 구현) -->
-        <div id="room-viewport" class="room-viewport" onclick="placeFurniture(event)"></div>
+<header>
+    <h1>♡ MY MINI ROOM ♡</h1>
+    <p>Welcome to my little cozy room!</p>
+</header>
 
-        <!-- 가구 선택 팔레트 (10가지 도트 감성 가구 아이템) -->
-        <div class="furniture-palette">
-            <div class="furniture-card" onclick="selectFurniture('☕', '체크 식탁세트')">
-                <span class="furniture-icon">☕</span>
-                <div class="furniture-name">식탁세트</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('🛋️', '핑크 소파')">
-                <span class="furniture-icon">🛋️</span>
-                <div class="furniture-name">핑크소파</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('🛏️', '체크 침대')">
-                <span class="furniture-icon">🛏️</span>
-                <div class="furniture-name">모던침대</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('💻', '노트북 책상')">
-                <span class="furniture-icon">💻</span>
-                <div class="furniture-name">책상세트</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('🪴', '초록이 화분')">
-                <span class="furniture-icon">🪴</span>
-                <div class="furniture-name">실내화분</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('🪞', '공주 화장대')">
-                <span class="furniture-icon">🪞</span>
-                <div class="furniture-name">화장대</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('🧸', '왕곰돌이 인형')">
-                <span class="furniture-icon">🧸</span>
-                <div class="furniture-name">곰인형</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('📚', '책장 수납장')">
-                <span class="furniture-icon">📚</span>
-                <div class="furniture-name">책장</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('💡', '스탠드 조명')">
-                <span class="furniture-icon">💡</span>
-                <div class="furniture-name">조명</div>
-            </div>
-            <div class="furniture-card" onclick="selectFurniture('📻', '레트로 라디오')">
-                <span class="furniture-icon">📻</span>
-                <div class="furniture-name">라디오</div>
-            </div>
-        </div>
+<div class="room" id="room">
 
-        <div class="controls">
-            <button class="action-btn" onclick="clearRoom()">전체 초기화</button>
-            <button class="action-btn back-btn" onclick="location.href='main.html'">미니홈피로 돌아가기</button>
-        </div>
+    <div class="wall"></div>
+    <div class="floor"></div>
+
+    <div class="window">
+        <div class="curtain left"></div>
+        <div class="curtain right"></div>
     </div>
 
-    <script>
-        let selectedSymbol = null;
+    <div class="sunlight"></div>
 
-        function selectFurniture(symbol, name) {
-            selectedSymbol = symbol;
-            document.getElementById("guide-text").innerText = `선택된 가구: [${name}] 👉 미니룸 안을 클릭하여 배치하세요!`;
-        }
+    <div class="wall-decoration">MY<br>ROOM ♡</div>
+    <div class="wall-clock">12</div>
 
-        function placeFurniture(event) {
-            if (!selectedSymbol) {
-                alert("먼저 아래 목록에서 배치할 가구를 선택해주세요!");
-                return;
-            }
+    <div class="rug"></div>
 
-            const viewport = document.getElementById("room-viewport");
-            const rect = viewport.getBoundingClientRect();
-            
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+</div>
 
-            const item = document.createElement("div");
-            item.classList.add("placed-item");
-            item.style.left = x + "px";
-            item.style.top = y + "px";
-            item.innerText = selectedSymbol;
+<h3 class="section-title">♡ Furniture Shop</h3>
 
-            // 배치된 가구를 클릭하면 삭제
-            item.addEventListener("click", function(e) {
-                e.stopPropagation();
-                item.remove();
-            });
+<div class="palette" id="palette"></div>
 
-            viewport.appendChild(item);
-        }
+<div class="editor">
+    <span class="editor-label">가구 편집 :</span>
+    <button onclick="resizeItem(1.15)">크게 +</button>
+    <button onclick="resizeItem(0.87)">작게 -</button>
+    <button onclick="rotateItem()">회전 ↻</button>
+    <button onclick="deleteItem()" class="secondary">선택 삭제</button>
+    <button onclick="saveRoom()">저장 ♡</button>
+    <button onclick="loadRoom()" class="secondary">불러오기</button>
+    <button onclick="clearRoom()" class="secondary">초기화</button>
+</div>
 
-        function clearRoom() {
-            const viewport = document.getElementById("room-viewport");
-            viewport.innerHTML = "";
-            selectedSymbol = null;
-            document.getElementById("guide-text").innerText = "가구를 초기화했습니다. 가구를 다시 선택해주세요!";
-        }
-    </script>
+<div class="guide" id="guide">
+    가구를 선택하고 방을 클릭해 배치하세요 ♡
+</div>
+
+<footer>
+    MY LITTLE WORLD · 2000's PIXEL ROOM
+</footer>
+
+</div>
+
+<script>
+
+// 가구 일러스트 SVG
+
+const furniture = {
+
+bed: {
+    name: "핑크 침대",
+    svg: `
+    <svg viewBox="0 0 120 100">
+    <rect x="8" y="20" width="104" height="65" fill="#a97970"/>
+    <rect x="12" y="15" width="96" height="65" fill="#e6a9ad"/>
+    <rect x="17" y="20" width="86" height="52" fill="#f4c7c4"/>
+    <rect x="20" y="24" width="37" height="20" fill="#fff0df"/>
+    <rect x="63" y="24" width="37" height="20" fill="#fff0df"/>
+    <rect x="18" y="47" width="84" height="24" fill="#d88996"/>
+    <rect x="25" y="49" width="70" height="5" fill="#f8d9d2"/>
+    <rect x="8" y="80" width="104" height="9" fill="#a97970"/>
+    <rect x="14" y="87" width="9" height="8" fill="#906b60"/>
+    <rect x="98" y="87" width="9" height="8" fill="#906b60"/>
+    </svg>`
+},
+
+sofa: {
+    name: "핑크 소파",
+    svg: `
+    <svg viewBox="0 0 120 100">
+    <rect x="10" y="25" width="100" height="53" fill="#b77d7b"/>
+    <rect x="15" y="12" width="90" height="50" fill="#e8a8a9"/>
+    <rect x="20" y="18" width="38" height="36" fill="#f5c9c5"/>
+    <rect x="62" y="18" width="38" height="36" fill="#f5c9c5"/>
+    <rect x="5" y="40" width="15" height="40" fill="#d28e91"/>
+    <rect x="100" y="40" width="15" height="40" fill="#d28e91"/>
+    <rect x="18" y="55" width="84" height="18" fill="#e8b1b0"/>
+    <rect x="20" y="75" width="9" height="12" fill="#956d60"/>
+    <rect x="91" y="75" width="9" height="12" fill="#956d60"/>
+    </svg>`
+},
+
+desk: {
+    name: "원목 책상",
+    svg: `
+    <svg viewBox="0 0 120 100">
+    <rect x="12" y="42" width="96" height="13" fill="#b47e56"/>
+    <rect x="17" y="55" width="10" height="38" fill="#956343"/>
+    <rect x="93" y="55" width="10" height="38" fill="#956343"/>
+    <rect x="28" y="10" width="62" height="35" fill="#8c7770"/>
+    <rect x="33" y="14" width="52" height="27" fill="#a9cdd0"/>
+    <rect x="55" y="42" width="9" height="4" fill="#796c65"/>
+    <rect x="65" y="49" width="30" height="5" fill="#f5e8c9"/>
+    <rect x="35" y="45" width="18" height="5" fill="#e9c9a2"/>
+    </svg>`
+},
+
+chair: {
+    name: "의자",
+    svg: `
+    <svg viewBox="0 0 120 100">
+    <rect x="28" y="12" width="64" height="52" fill="#c9898b"/>
+    <rect x="35" y="18" width="50" height="38" fill="#f0bfc0"/>
+    <rect x="24" y="58" width="72" height="15" fill="#d99b9b"/>
+    <rect x="30" y="72" width="8" height="24" fill="#9d7561"/>
+    <rect x="82" y="72" width="8" height="24" fill="#9d7561"/>
+    </svg>`
+},
+
+plant: {
+    name: "초록 화분",
+    svg: `
+    <svg viewBox="0 0 120 110">
+    <rect x="51" y="25" width="9" height="40" fill="#718e62"/>
+    <rect x="30" y="30" width="25" height="10" fill="#72996b"/>
+    <rect x="25" y="20" width="18" height="20" fill="#91b57d"/>
+    <rect x="58" y="12" width="25" height="12" fill="#799d6b"/>
+    <rect x="69" y="4" width="17" height="20" fill="#a1bf83"/>
+    <rect x="44" y="45" width="38" height="22" fill="#8eb47b"/>
+    <rect x="31" y="65" width="58" height="10" fill="#a56e58"/>
+    <path d="M35 75 H85 L78 105 H42 Z" fill="#d68f7d"/>
+    <rect x="42" y="80" width="36" height="5" fill="#e9b1a0"/>
+    </svg>`
+},
+
+dresser: {
+    name: "화장대",
+    svg: `
+    <svg viewBox="0 0 120 110">
+    <rect x="25" y="8" width="70" height="48" fill="#a8796a"/>
+    <rect x="30" y="12" width="60" height="40" fill="#f6dfd4"/>
+    <rect x="38" y="18" width="44" height="29" fill="#c1d8d5"/>
+    <rect x="20" y="56" width="80" height="12" fill="#c78e7d"/>
+    <rect x="28" y="68" width="64" height="33" fill="#e3b2a1"/>
+    <rect x="35" y="75" width="22" height="20" fill="#f5d8c9"/>
+    <rect x="63" y="75" width="22" height="20" fill="#f5d8c9"/>
+    <rect x="57" y="82" width="6" height="5" fill="#ad796d"/>
+    </svg>`
+},
+
+bookcase: {
+    name: "책장",
+    svg: `
+    <svg viewBox="0 0 110 110">
+    <rect x="17" y="5" width="76" height="100" fill="#a77859"/>
+    <rect x="23" y="12" width="64" height="88" fill="#e5c4a1"/>
+    <rect x="23" y="42" width="64" height="5" fill="#a77859"/>
+    <rect x="23" y="72" width="64" height="5" fill="#a77859"/>
+    <rect x="29" y="17" width="10" height="22" fill="#d68d8d"/>
+    <rect x="40" y="21" width="12" height="18" fill="#8da99b"/>
+    <rect x="55" y="14" width="10" height="25" fill="#d8b46f"/>
+    <rect x="69" y="18" width="12" height="21" fill="#a3b9cf"/>
+    <rect x="29" y="49" width="15" height="21" fill="#b38eaf"/>
+    <rect x="47" y="52" width="12" height="18" fill="#df9b87"/>
+    <rect x="63" y="48" width="17" height="22" fill="#94ad8d"/>
+    <rect x="30" y="81" width="50" height="15" fill="#d7ae8c"/>
+    </svg>`
+},
+
+lamp: {
+    name: "스탠드 조명",
+    svg: `
+    <svg viewBox="0 0 100 110">
+    <path d="M50 8 L18 57 H82 Z" fill="#e9b9a1"/>
+    <path d="M50 17 L29 53 H71 Z" fill="#ffe9b7"/>
+    <rect x="46" y="57" width="8" height="38" fill="#a77d61"/>
+    <rect x="28" y="94" width="44" height="8" fill="#a77d61"/>
+    <rect x="44" y="6" width="12" height="7" fill="#a77d61"/>
+    </svg>`
+},
+
+teddy: {
+    name: "곰인형",
+    svg: `
+    <svg viewBox="0 0 100 110">
+    <circle cx="27" cy="22" r="14" fill="#a77b5d"/>
+    <circle cx="73" cy="22" r="14" fill="#a77b5d"/>
+    <circle cx="50" cy="45" r="34" fill="#c99b75"/>
+    <circle cx="38" cy="40" r="4" fill="#59463d"/>
+    <circle cx="62" cy="40" r="4" fill="#59463d"/>
+    <ellipse cx="50" cy="55" rx="14" ry="10" fill="#f1d7b9"/>
+    <rect x="46" y="52" width="8" height="6" fill="#745247"/>
+    <ellipse cx="50" cy="87" rx="29" ry="19" fill="#bd906d"/>
+    <circle cx="20" cy="82" r="11" fill="#c99b75"/>
+    <circle cx="80" cy="82" r="11" fill="#c99b75"/>
+    </svg>`
+},
+
+table: {
+    name: "티테이블",
+    svg: `
+    <svg viewBox="0 0 110 100">
+    <ellipse cx="55" cy="35" rx="46" ry="20" fill="#a87b61"/>
+    <ellipse cx="55" cy="30" rx="46" ry="20" fill="#e5c3a1"/>
+    <rect x="32" y="43" width="7" height="43" fill="#a87b61"/>
+    <rect x="71" y="43" width="7" height="43" fill="#a87b61"/>
+    <rect x="45" y="16" width="20" height="12" fill="#fff4df"/>
+    <rect x="51" y="11" width="8" height="8" fill="#b67b65"/>
+    </svg>`
+},
+
+rug: {
+    name: "꽃무늬 러그",
+    svg: `
+    <svg viewBox="0 0 120 90">
+    <ellipse cx="60" cy="45" rx="55" ry="37" fill="#e5b4ad" stroke="#fff0df" stroke-width="5" stroke-dasharray="5 4"/>
+    <ellipse cx="60" cy="45" rx="42" ry="27" fill="none" stroke="#f6ded0" stroke-width="3"/>
+    <circle cx="60" cy="45" r="9" fill="#fff1d0"/>
+    <circle cx="60" cy="29" r="7" fill="#f8e6ce"/>
+    <circle cx="76" cy="45" r="7" fill="#f8e6ce"/>
+    <circle cx="60" cy="61" r="7" fill="#f8e6ce"/>
+    <circle cx="44" cy="45" r="7" fill="#f8e6ce"/>
+    </svg>`
+},
+
+radio: {
+    name: "레트로 라디오",
+    svg: `
+    <svg viewBox="0 0 110 85">
+    <rect x="8" y="15" width="94" height="60" fill="#aa7864"/>
+    <rect x="13" y="20" width="84" height="50" fill="#d8a18a"/>
+    <rect x="20" y="27" width="46" height="35" fill="#b98273"/>
+    <rect x="25" y="32" width="36" height="25" fill="#e8c4a7"/>
+    <rect x="73" y="28" width="17" height="17" fill="#f5d9b0"/>
+    <circle cx="81" cy="57" r="7" fill="#936b5b"/>
+    <rect x="23" y="10" width="64" height="5" fill="#8f6757"/>
+    </svg>`
+}
+
+};
+
+// 팔레트 만들기
+
+const palette = document.getElementById('palette');
+
+Object.entries(furniture).forEach(([id, item]) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = item.svg + `<span>${item.name}</span>`;
+    card.onclick = () => selectFurniture(id, card);
+    card.dataset.id = id;
+    palette.appendChild(card);
+});
+
+const room = document.getElementById('room');
+const guide = document.getElementById('guide');
+
+let selectedFurniture = null;
+let selectedItem = null;
+let dragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// 가구 선택
+
+function selectFurniture(id, card) {
+    selectedFurniture = id;
+
+    document.querySelectorAll('.card').forEach(c =>
+        c.classList.remove('active')
+    );
+
+    card.classList.add('active');
+
+    guide.textContent =
+        furniture[id].name + ' 선택 완료! 방을 클릭해서 배치하세요 ♡';
+}
+
+// 방 클릭 시 배치
+
+room.addEventListener('click', (e) => {
+
+    if (e.target.closest('.placed-item')) return;
+    if (!selectedFurniture) {
+        guide.textContent = '먼저 가구를 선택해주세요!';
+        return;
+    }
+
+    const rect = room.getBoundingClientRect();
+
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    createItem(selectedFurniture, x, y);
+
+});
+
+// 가구 생성
+
+function createItem(id, x, y, size = 17, rotation = 0) {
+
+    const item = document.createElement('div');
+
+    item.className = 'placed-item';
+    item.dataset.id = id;
+    item.dataset.size = size;
+    item.dataset.rotation = rotation;
+
+    item.style.left = x + '%';
+    item.style.top = y + '%';
+    item.style.width = size + '%';
+    item.style.transform =
+        `translate(-50%, -50%) rotate(${rotation}deg)`;
+
+    item.innerHTML = furniture[id].svg;
+
+    item.addEventListener('pointerdown', startDrag);
+
+    item.addEventListener('click', e => {
+        e.stopPropagation();
+        selectPlacedItem(item);
+    });
+
+    room.appendChild(item);
+    selectPlacedItem(item);
+
+    return item;
+}
+
+// 가구 선택
+
+function selectPlacedItem(item) {
+
+    document.querySelectorAll('.placed-item').forEach(el =>
+        el.classList.remove('selected')
+    );
+
+    selectedItem = item;
+    item.classList.add('selected');
+
+    guide.textContent =
+        furniture[item.dataset.id].name +
+        ' 선택됨 · 드래그해서 이동할 수 있어요!';
+}
+
+// 드래그 이동
+
+function startDrag(e) {
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const item = e.currentTarget;
+
+    selectPlacedItem(item);
+
+    dragging = true;
+
+    const rect = room.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+
+    dragOffsetX = e.clientX -
+        (itemRect.left + itemRect.width / 2);
+
+    dragOffsetY = e.clientY -
+        (itemRect.top + itemRect.height / 2);
+
+    item.setPointerCapture(e.pointerId);
+}
+
+document.addEventListener('pointermove', e => {
+
+    if (!dragging || !selectedItem) return;
+
+    const rect = room.getBoundingClientRect();
+
+    const x = e.clientX - rect.left - dragOffsetX;
+    const y = e.clientY - rect.top - dragOffsetY;
+
+    const halfWidth = selectedItem.offsetWidth / 2;
+    const halfHeight = selectedItem.offsetHeight / 2;
+
+    const safeX = Math.max(halfWidth,
+        Math.min(rect.width - halfWidth, x));
+
+    const safeY = Math.max(halfHeight,
+        Math.min(rect.height - halfHeight, y));
+
+    selectedItem.style.left = (safeX / rect.width * 100) + '%';
+    selectedItem.style.top = (safeY / rect.height * 100) + '%';
+
+});
+
+document.addEventListener('pointerup', () => {
+    dragging = false;
+});
+
+// 크기 변경
+
+function resizeItem(factor) {
+
+    if (!selectedItem) {
+        guide.textContent = '먼저 배치된 가구를 선택하세요!';
+        return;
+    }
+
+    let size = Number(selectedItem.dataset.size);
+    size = Math.max(6, Math.min(35, size * factor));
+
+    selectedItem.dataset.size = size;
+    selectedItem.style.width = size + '%';
+}
+
+// 회전
+
+function rotateItem() {
+
+    if (!selectedItem) {
+        guide.textContent = '먼저 가구를 선택하세요!';
+        return;
+    }
+
+    let rotation =
+        Number(selectedItem.dataset.rotation) + 15;
+
+    if (rotation >= 360) rotation = 0;
+
+    selectedItem.dataset.rotation = rotation;
+
+    selectedItem.style.transform =
+        `translate(-50%, -50%) rotate(${rotation}deg)`;
+}
+
+// 삭제
+
+function deleteItem() {
+
+    if (!selectedItem) {
+        guide.textContent = '삭제할 가구를 선택하세요!';
+        return;
+    }
+
+    selectedItem.remove();
+    selectedItem = null;
+
+    guide.textContent = '가구를 삭제했어요 ♡';
+}
+
+// 초기화
+
+function clearRoom() {
+
+    if (!confirm('방을 모두 초기화할까요?')) return;
+
+    room.querySelectorAll('.placed-item').forEach(item =>
+        item.remove()
+    );
+
+    selectedItem = null;
+    selectedFurniture = null;
+
+    document.querySelectorAll('.card').forEach(c =>
+        c.classList.remove('active')
+    );
+
+    guide.textContent = '새로운 미니룸을 꾸며보세요 ♡';
+}
+
+// 저장
+
+function saveRoom() {
+
+    const items = [...room.querySelectorAll('.placed-item')].map(item => ({
+        id: item.dataset.id,
+        x: item.style.left,
+        y: item.style.top,
+        size: item.dataset.size,
+        rotation: item.dataset.rotation
+    }));
+
+    localStorage.setItem('myMiniRoom', JSON.stringify(items));
+
+    guide.textContent = '미니룸이 저장되었어요! ♡';
+}
+
+// 불러오기
+
+function loadRoom() {
+
+    const saved = localStorage.getItem('myMiniRoom');
+
+    if (!saved) {
+        guide.textContent = '저장된 미니룸이 없어요!';
+        return;
+    }
+
+    room.querySelectorAll('.placed-item').forEach(item =>
+        item.remove()
+    );
+
+    JSON.parse(saved).forEach(data => {
+
+        createItem(
+            data.id,
+            parseFloat(data.x),
+            parseFloat(data.y),
+            Number(data.size),
+            Number(data.rotation)
+        );
+
+    });
+
+    selectedItem = null;
+
+    guide.textContent = '저장한 미니룸을 불러왔어요 ♡';
+}
+
+</script>
+
 </body>
 </html>
