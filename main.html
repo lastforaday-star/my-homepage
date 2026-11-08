@@ -192,7 +192,7 @@
             line-height: 1.2;
         }
 
-        /* 게임 오락실 메뉴 박스 (버튼 목록) */
+        /* 게임 오락실 메뉴 박스 */
         .arcade-box {
             margin-top: 15px;
             padding: 10px;
@@ -233,19 +233,19 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* 뒷배경 어둡게 */
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
         }
         .modal-content {
             background: white;
             padding: 20px;
             border-radius: 15px;
             border: 3px solid #b44a59;
-            width: 320px;
+            width: 340px;
             text-align: center;
             position: relative;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
@@ -271,10 +271,11 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
             margin: 15px 0;
+            justify-content: center;
         }
         .card {
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             background-color: #f8c8d0;
             border: 2px solid white;
             border-radius: 6px;
@@ -370,33 +371,24 @@
         </div>
     </div>
 
-    <!-- 2. B게임 팝업창 (나중에 원하시는 내용으로 채우시면 됩니다!) -->
+    <!-- 2. B게임 팝업창 -->
     <div id="b-game-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('b-game-modal')">&times;</button>
             <h3 style="color:#b44a59; margin-top:0;">🎮 B게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째로 넣고 싶은 게임이나 콘텐츠를 만들 수 있어요!</p>
+            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째 게임을 추가해 보세요!</p>
             <button class="arcade-btn" onclick="closeModal('b-game-modal')">닫기</button>
         </div>
     </div>
 
-    <!-- 3. C게임 팝업창 (나중에 원하시는 내용으로 채우시면 됩니다!) -->
+    <!-- 3. C게임 팝업창 -->
     <div id="c-game-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('c-game-modal')">&times;</button>
             <h3 style="color:#b44a59; margin-top:0;">🎯 C게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째로 넣고 싶은 게임이나 콘텐츠를 만들 수 있어요!</p>
+            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째 게임을 추가해 보세요!</p>
             <button class="arcade-btn" onclick="closeModal('c-game-modal')">닫기</button>
         </div>
     </div>
 
-    <!-- 자바스크립트 영역 -->
-    <script>
-        // 오늘 날짜 표시
-        document.addEventListener("DOMContentLoaded", function() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            const dateElement = document.getElementById("current-date");
-            if (dateElement) {
+    <!-- 자바스크
