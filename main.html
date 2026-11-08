@@ -28,7 +28,7 @@
         /* 왼쪽 바깥 공간에 띄울 아바타 위치 조절 */
         .side-avatar {
             position: absolute;
-            left: calc(50% - 610px); /* 숫자를 줄이면 왼쪽으로, 늘리면 오른쪽(본체쪽)으로 갑니다 */
+            left: calc(50% - 610px);
             top: 40%;
             width: 150px;
             text-align: center;
@@ -345,7 +345,8 @@
                 <div class="arcade-title">🕹️ 미니 오락실</div>
                 <div class="arcade-btn-group">
                     <button class="arcade-btn" type="button" onclick="openModal('card-game-modal')">[카드 짝 맞추기 게임]</button>
-                    <button class="arcade-btn" type="button" onclick="location.href='room-simulator.html'">[B게임]</button>
+                    <!-- B게임 버튼: 미니룸 꾸미기 시뮬레이터 페이지로 이동 -->
+                    <button class="arcade-btn" type="button" onclick="location.href='room-simulator.html'">[미니룸 꾸미기]</button>
                     <button class="arcade-btn" type="button" onclick="openModal('c-game-modal')">[C게임]</button>
                 </div>
             </div>
@@ -391,16 +392,6 @@
             <div id="game-grid" class="game-grid"></div>
             <button class="arcade-btn" type="button" onclick="startCardGame()">다시 섞기</button>
             <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">카드를 뒤집어 짝을 맞춰보세요!</div>
-        </div>
-    </div>
-
-    <!-- 2. B게임 팝업창 -->
-    <div id="b-game-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" type="button" onclick="closeModal('b-game-modal')">&times;</button>
-            <h3 style="color:#b44a59; margin-top:0;">🎮 B게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 두 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" type="button" onclick="closeModal('b-game-modal')">닫기</button>
         </div>
     </div>
 
@@ -498,3 +489,64 @@
             if (statusEl) {
                 statusEl.innerText = "카드를 뒤집어 짝을 맞춰보세요!";
             }
+
+            let deck = [...cardImages, ...cardImages];
+            deck.sort(() => Math.random() - 0.5);
+
+            deck.forEach((imgSrc) => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                card.dataset.image = imgSrc;
+
+                const img = document.createElement("img");
+                img.src = imgSrc;
+                img.alt = "카드 이미지";
+                card.appendChild(img);
+
+                card.addEventListener("click", flipCard);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (isLockBoard) return;
+            if (this === flippedCards[0]) return;
+            if (this.classList.contains("matched") || this.classList.contains("flipped")) return;
+
+            this.classList.add("flipped");
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.dataset.image === card2.dataset.image;
+
+            if (isMatch) {
+                card1.classList.add("matched");
+                card2.classList.add("matched");
+                matchedCount += 2;
+                flippedCards = [];
+
+                if (matchedCount === 16) {
+                    const statusEl = document.getElementById("game-status");
+                    if (statusEl) {
+                        statusEl.innerText = "🎉 ㅊㅋㅊㅋ";
+                    }
+                }
+            } else {
+                isLockBoard = true;
+                setTimeout(() => {
+                    card1.classList.remove("flipped");
+                    card2.classList.remove("flipped");
+                    flippedCards = [];
+                    isLockBoard = false;
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>
