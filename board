@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>미니룸 사진 게시판</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 25px 15px;
+      background: #fff7f8;
+      color: #65545a;
+      font-family: Arial, sans-serif;
+    }
+
+    .board {
+      max-width: 650px;
+      margin: auto;
+      padding: 22px;
+      background: #fff;
+      border: 2px solid #efcbd5;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px #eacbd455;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: #c77e96;
+      text-align: center;
+      font-size: 25px;
+    }
+
+    .subtitle {
+      margin-bottom: 25px;
+      color: #aa929b;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .write-box {
+      padding: 17px;
+      background: #fff8fa;
+      border: 1px solid #f1dce2;
+      border-radius: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 11px;
+      border: 1px solid #e8cbd4;
+      border-radius: 7px;
+      background: white;
+      color: #65545a;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      background: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 7px;
+      background: #d993aa;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    #status {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #b66f87;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .post-title {
+      margin: 28px 0 13px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #e8cbd4;
+      color: #bd8296;
+      font-size: 17px;
+    }
+
+    .post {
+      margin-bottom: 15px;
+      padding: 14px;
+      border: 1px solid #f0dfe4;
+      border-radius: 9px;
+      background: #fffdfd;
+    }
+
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #a58b95;
+    }
+
+    .post-name {
+      color: #c77e96;
+      font-weight: bold;
+    }
+
+    .post-message {
+      margin: 10px 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .post img {
+      display: block;
+      width: 100%;
+      max-height: 450px;
+      object-fit: contain;
+      border-radius: 7px;
+      background: #fff7f8;
+    }
+
+    .empty {
+      padding: 25px 10px;
+      color: #b5a1a8;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .notice {
+      margin-top: 15px;
+      color: #ad9aa1;
+      font-size: 11px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="board">
+    <h1>♡ PHOTO GUESTBOOK ♡</h1>
+    <div class="subtitle">
+      자유롭게 사진과 이야기를 남겨 주세요!
+    </div>
+
+    <form class="write-box" id="uploadForm">
+      <input
+        type="text"
+        name="nickname"
+        placeholder="닉네임"
+        maxlength="20"
+        required
+      >
+
+      <textarea
+        name="message"
+        placeholder="오늘의 이야기..."
+        maxlength="500"
+        required
+      ></textarea>
+
+      <input
+        type="file"
+        name="photo"
+        accept="image/jpeg,image/png,image/gif,image/webp"
+        required
+      >
+
+      <button type="submit" id="submitButton">
+        사진과 글 올리기
+      </button>
+
+      <div id="status" aria-live="polite"></div>
+    </form>
+
+    <h2 class="post-title">♥ 방문자들의 이야기</h2>
+
+    <section id="postList">
+      <div class="empty">게시글을 불러오는 중...</div>
+    </section>
+
+    <div class="notice">
+      사진은 최대 5MB까지 업로드할 수 있습니다.
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const statusBox = document.getElementById('status');
+    const submitButton = document.getElementById('submitButton');
+    const postList = document.getElementById('postList');
+
+    function loadPosts() {
+      google.script.run
+        .withSuccessHandler(showPosts)
+        .withFailureHandler(showLoadError)
+        .getPosts();
+    }
+
+    function showPosts(posts) {
+      postList.replaceChildren();
+
+      if (!posts || posts.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '아직 등록된 게시글이 없습니다.';
+        postList.appendChild(empty);
+        return;
+      }
+
+      posts.forEach(post => {
+        const article = document.createElement('article');
+        article.className = 'post';
+
+        const info = document.createElement('div');
+        info.className = 'post-info';
+
+        const nickname = document.createElement('span');
+        nickname.className = 'post-name';
+        nickname.textContent = post.nickname;
+
+        const date = document.createElement('span');
+        date.textContent = post.date;
+
+        info.append(nickname, date);
+
+        const message = document.createElement('p');
+        message.className = 'post-message';
+        message.textContent = post.message;
+
+        const photo = document.createElement('img');
+        photo.src = post.imageUrl;
+        photo.alt = '방문자가 올린 사진';
+        photo.loading = 'lazy';
+
+        article.append(info, message, photo);
+        postList.appendChild(article);
+      });
+    }
+
+    function showLoadError(error) {
+      postList.textContent = '게시글을 불러오지 못했습니다.';
+      console.error(error);
+    }
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const photo = form.elements.photo.files[0];
+
+      if (!photo) {
+        statusBox.textContent = '사진을 선택해 주세요.';
+        return;
+      }
+
+      if (photo.size > 5 * 1024 * 1024) {
+        statusBox.textContent = '사진 용량은 5MB 이하만 가능합니다.';
+        return;
+      }
+
+      submitButton.disabled = true;
+      statusBox.textContent = '사진을 업로드하고 있습니다...';
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          statusBox.textContent = result;
+          form.reset();
+          submitButton.disabled = false;
+          loadPosts();
+        })
+        .withFailureHandler(function(error) {
+          statusBox.textContent =
+            error.message || '업로드에 실패했습니다.';
+          submitButton.disabled = false;
+        })
+        .processUpload(form);
+    });
+
+    loadPosts();
+  </script>
+
+</body>
+</html>
