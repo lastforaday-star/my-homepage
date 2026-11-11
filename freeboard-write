@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>글쓰기 | 맛집 갤러리</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f5f6f8;
+      color: #222;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 24px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .back {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 25px;
+      margin-bottom: 20px;
+    }
+
+    .board {
+      background: white;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 1100px;
+      border: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="freeboard.html">맛집 갤러리</a>
+    <a class="back" href="freeboard.html">← 게시판으로</a>
+  </div>
+</header>
+
+<main>
+  <h1>새 게시글 작성</h1>
+
+  <section class="board">
+    <iframe
+      src="https://script.google.com/macros/s/AKfycbxWM1_7i3RUJ-mRSa59TxoxWXmqC48x53qme1SGfZ7peyIUHi15o-O_dqJ-phmH0FS4sA/exec?page=write"
+      title="게시글 작성">
+    </iframe>
+  </section>
+</main>
+
+</body>
+</html>
