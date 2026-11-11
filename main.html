@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,16 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
+
     <style>
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
         * {
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Single Day', sans-serif;
             background-image: url("배경.gif");
@@ -25,20 +22,25 @@
             position: relative;
         }
 
-        /* 왼쪽 바깥 공간에 띄울 아바타 위치 조절 */
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
+        .side-avatar {
+            width: 130px;
+            margin: 10px auto 0;
+            text-align: center;
+        }
 
-.side-avatar {
-    width: 130px;
-    margin: 10px auto 0;
-    text-align: center;
-}
+        .side-avatar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
-.side-avatar img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
         .homepage {
             width: 1000px;
             min-height: 600px;
@@ -51,17 +53,20 @@
             border: 5px solid white;
             border-radius: 25px;
         }
+
         .profile {
             background: white;
             border: 2px solid #86BAAE;
             border-radius: 10px;
             padding: 15px;
         }
+
         .profile h3 {
             font-size: 17px;
             text-align: center;
             color: #B41C28;
         }
+
         .profile-image {
             width: 130px;
             height: 130px;
@@ -74,23 +79,28 @@
             justify-content: center;
             font-size: 45px;
         }
+
         .profile p {
             font-size: 18px;
             line-height: 1.6;
             text-align: center;
         }
+
         .content {
+            min-width: 0;
             background: white;
             border: 2px solid #86BAAE;
             border-radius: 10px;
             padding: 15px;
         }
+
         .content h2 {
             color: #B41C28;
             font-size: 17px;
             border-bottom: 1px solid #86BAAE;
             padding-bottom: 10px;
         }
+
         .news {
             background: #C2E2DD;
             border: 1px solid #86BAAE;
@@ -99,6 +109,7 @@
             font-size: 17px;
             line-height: 2;
         }
+
         .miniroom {
             height: 280px;
             background: #ffffff;
@@ -108,17 +119,64 @@
             justify-content: center;
             font-size: 55px;
         }
+
         .miniroom img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
         }
+
+        /* 자유게시판 화면 */
+
+        #board-view {
+            display: none;
+        }
+
+        .board-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .board-toolbar h3 {
+            margin: 0;
+            color: #B41C28;
+            font-size: 18px;
+        }
+
+        .board-home-button {
+            border: 1px solid #B41C28;
+            border-radius: 7px;
+            padding: 7px 12px;
+            background: #86BAAE;
+            color: white;
+            font-family: 'Single Day', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .board-home-button:hover {
+            background: #9CA123;
+        }
+
+        #freeboard-frame {
+            display: block;
+            width: 100%;
+            height: 850px;
+            border: 1px solid #86BAAE;
+            border-radius: 8px;
+            background: white;
+        }
+
         .menu {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
+
         .menu a {
             display: block;
             padding: 12px 5px;
@@ -130,21 +188,26 @@
             border-radius: 8px;
             font-size: 19px;
         }
+
         .menu a:hover {
             background: #9CA123;
         }
+
         .menu .youtube {
             background: #B41C28;
         }
+
         .menu .back {
             background: #9E2024;
         }
+
         .footer {
             text-align: center;
             font-size: 11px;
             color: #9E2024;
             margin-top: 15px;
         }
+
         .creator {
             width: 900px;
             min-height: 230px;
@@ -159,6 +222,7 @@
             font-size: 25px;
             color: #B41C28;
         }
+
         .creator img {
             width: 800px;
             height: 700px;
@@ -167,6 +231,7 @@
         }
 
         /* 운세 위젯 스타일 */
+
         .fortune-box {
             margin-top: 15px;
             padding: 10px;
@@ -175,12 +240,14 @@
             border-radius: 8px;
             text-align: center;
         }
+
         .fortune-title {
             font-size: 14px;
             font-weight: bold;
             color: #4a7c59;
             margin-bottom: 6px;
         }
+
         #fortune-text {
             font-size: 11px;
             color: #333;
@@ -188,6 +255,7 @@
             line-height: 1.3;
             min-height: 30px;
         }
+
         .fortune-box button {
             background-color: #76a08e;
             color: white;
@@ -198,9 +266,11 @@
             cursor: pointer;
             font-family: 'Single Day', sans-serif;
         }
+
         .fortune-box button:hover {
             background-color: #5c8372;
         }
+
         .fortune-tip {
             font-size: 9px !important;
             color: #666;
@@ -209,6 +279,7 @@
         }
 
         /* 미니 오락실 메뉴 박스 */
+
         .arcade-box {
             margin-top: 15px;
             padding: 10px;
@@ -217,17 +288,20 @@
             border-radius: 8px;
             text-align: center;
         }
+
         .arcade-title {
             font-size: 14px;
             font-weight: bold;
             color: #b44a59;
             margin-bottom: 8px;
         }
+
         .arcade-btn-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
+
         .arcade-btn {
             background-color: #d97987;
             color: white;
@@ -239,11 +313,13 @@
             font-family: 'Single Day', sans-serif;
             transition: background 0.2s;
         }
+
         .arcade-btn:hover {
             background-color: #b44a59;
         }
 
         /* 팝업 모달창 공통 스타일 */
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -256,6 +332,7 @@
             align-items: center;
             z-index: 9999;
         }
+
         .modal-content {
             background: white;
             padding: 20px;
@@ -266,6 +343,7 @@
             position: relative;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
+
         .modal-close {
             position: absolute;
             top: 10px;
@@ -277,11 +355,13 @@
             cursor: pointer;
             color: #999;
         }
+
         .modal-close:hover {
             color: #B41C28;
         }
 
         /* 카드 게임 내부 그리드 스타일 */
+
         .game-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -289,6 +369,7 @@
             margin: 15px 0;
             justify-content: center;
         }
+
         .card {
             width: 60px;
             height: 60px;
@@ -301,30 +382,56 @@
             justify-content: center;
             overflow: hidden;
         }
+
         .card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: none;
         }
-        .card.flipped img, .card.matched img {
+
+        .card.flipped img,
+        .card.matched img {
             display: block;
         }
-        .card.flipped, .card.matched {
+
+        .card.flipped,
+        .card.matched {
             background-color: white;
+        }
+
+        @media (max-width: 1050px) {
+            .homepage {
+                width: calc(100% - 20px);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .homepage {
+                grid-template-columns: 1fr;
+            }
+
+            #freeboard-frame {
+                height: 750px;
+            }
         }
     </style>
 </head>
+
 <body>
+
     <div class="homepage">
+
         <!-- 왼쪽 프로필 -->
         <aside class="profile">
             <h3>MY PROFILE</h3>
+
             <div class="profile-image">
                 <img src="프로필사진.jpg" alt="프로필 사진">
             </div>
+
             <p>방명록 안쓰면 바보</p>
-            
+
             <!-- 오늘의 운세 위젯 -->
             <div class="fortune-box">
                 <div class="fortune-title">🔮 오늘의 랜덤 운세</div>
@@ -336,43 +443,103 @@
             <!-- 미니 오락실 게임 메뉴 버튼들 -->
             <div class="arcade-box">
                 <div class="arcade-title">🕹️ 미니 오락실</div>
+
                 <div class="arcade-btn-group">
-                    <button class="arcade-btn" type="button" onclick="openModal('card-game-modal')">[카드 짝 맞추기 게임]</button>
-                    <!-- B게임 버튼: 미니룸 꾸미기 시뮬레이터 페이지로 이동 -->
-                    <button class="arcade-btn" type="button" onclick="location.href='room-simulator.html'">[미니룸 꾸미기]</button>
-                    <button class="arcade-btn" type="button" onclick="openModal('c-game-modal')">[C게임]</button>
+                    <button class="arcade-btn" type="button" onclick="openModal('card-game-modal')">
+                        [카드 짝 맞추기 게임]
+                    </button>
+
+                    <button class="arcade-btn" type="button" onclick="location.href='room-simulator.html'">
+                        [미니룸 꾸미기]
+                    </button>
+
+                    <button class="arcade-btn" type="button" onclick="openModal('c-game-modal')">
+                        [C게임]
+                    </button>
                 </div>
             </div>
         </aside>
 
+
         <!-- 가운데 메인 화면 -->
-        <main class="content">
-            <h2>공부하기 싫어서 만들었어요</h2>
-            <div class="news">
-                <strong>오늘은?</strong><br>
-                · <span id="current-date"></span>
-            </div>
-            <div class="miniroom-title">Mini Room</div>
-            <div class="miniroom">
-                <img src="miniroom.gif" alt="미니룸">
-            </div>
-            <div class="footer">Copyright@ 어쩌구저쩌구</div>
+        <main class="content" id="main-content">
+
+            <!-- 기본 미니룸 화면 -->
+            <section id="home-view">
+                <h2>공부하기 싫어서 만들었어요</h2>
+
+                <div class="news">
+                    <strong>오늘은?</strong><br>
+                    · <span id="current-date"></span>
+                </div>
+
+                <div class="miniroom-title">Mini Room</div>
+
+                <div class="miniroom">
+                    <img src="miniroom.gif" alt="미니룸">
+                </div>
+
+                <div class="footer">Copyright@ 어쩌구저쩌구</div>
+            </section>
+
+
+            <!-- 자유게시판 화면 -->
+            <section id="board-view">
+
+                <div class="board-toolbar">
+                    <h3>맛집 갤러리 자유게시판</h3>
+
+                    <button
+                        class="board-home-button"
+                        type="button"
+                        onclick="showHome()">
+                        미니룸으로 돌아가기
+                    </button>
+                </div>
+
+                <iframe
+                    id="freeboard-frame"
+                    src="https://script.google.com/macros/s/AKfycbxWM1_7i3RUJ-mRSa59TxoxWXmqC48x53qme1SGfZ7peyIUHi15o-O_dqJ-phmH0FS4sA/exec"
+                    title="맛집 갤러리 자유게시판"
+                    loading="lazy">
+                </iframe>
+
+            </section>
+
         </main>
+
 
         <!-- 오른쪽 메뉴 -->
         <nav class="menu">
+
             <a href="index.html" class="back">처음으로</a>
             <a href="diary.html">다이어리</a>
             <a href="photo.html">사진첩</a>
             <a href="board.html">공유사진첩</a>
             <a href="guestbook.html">방명록</a>
-            <a href="#">자유게시판</a>
-            <a href="https://www.youtube.com/@lastforaday" target="_blank" class="youtube">▶ YouTube</a>
+
+            <a
+                href="#freeboard"
+                id="freeboard-menu"
+                onclick="showFreeboard(); return false;">
+                자유게시판
+            </a>
+
+            <a
+                href="https://www.youtube.com/@lastforaday"
+                target="_blank"
+                class="youtube">
+                ▶ YouTube
+            </a>
+
             <div class="side-avatar">
-    <img src="왼쪽 아바타.gif" alt="어서오세요 아바타">
-</div>
+                <img src="왼쪽 아바타.gif" alt="어서오세요 아바타">
+            </div>
+
         </nav>
+
     </div>
+
 
     <!-- 만든이 영역 -->
     <section class="creator">
@@ -381,40 +548,96 @@
         <img src="만든이 사진.JPG" alt="만든이 사진">
     </section>
 
-    <!-- 1. 카드 짝 맞추기 게임 팝업창 -->
+
+    <!-- 카드 짝 맞추기 게임 팝업창 -->
     <div id="card-game-modal" class="modal-overlay">
+
         <div class="modal-content">
-            <button class="modal-close" type="button" onclick="closeModal('card-game-modal')">&times;</button>
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeModal('card-game-modal')">
+                &times;
+            </button>
+
             <h3 style="color:#b44a59; margin-top:0;">🃏 카드 짝 맞추기</h3>
+
             <div id="game-grid" class="game-grid"></div>
-            <button class="arcade-btn" type="button" onclick="startCardGame()">다시 섞기</button>
-            <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">카드를 뒤집어 짝을 맞춰보세요!</div>
+
+            <button class="arcade-btn" type="button" onclick="startCardGame()">
+                다시 섞기
+            </button>
+
+            <div id="game-status" style="font-size:12px; margin-top:8px; color:#555;">
+                카드를 뒤집어 짝을 맞춰보세요!
+            </div>
+
         </div>
     </div>
 
-    <!-- 3. C게임 팝업창 -->
+
+    <!-- C게임 팝업창 -->
     <div id="c-game-modal" class="modal-overlay">
+
         <div class="modal-content">
-            <button class="modal-close" type="button" onclick="closeModal('c-game-modal')">&times;</button>
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeModal('c-game-modal')">
+                &times;
+            </button>
+
             <h3 style="color:#b44a59; margin-top:0;">🎯 C게임</h3>
-            <p style="font-size:14px; color:#444; margin: 20px 0;">여기에 세 번째 게임을 추가해 보세요!</p>
-            <button class="arcade-btn" type="button" onclick="closeModal('c-game-modal')">닫기</button>
+
+            <p style="font-size:14px; color:#444; margin: 20px 0;">
+                여기에 세 번째 게임을 추가해 보세요!
+            </p>
+
+            <button class="arcade-btn" type="button" onclick="closeModal('c-game-modal')">
+                닫기
+            </button>
+
         </div>
     </div>
 
-    <!-- 자바스크립트 영역 -->
+
+    <!-- 자바스크립트 -->
     <script>
-        // 날짜 출력 및 초기화
+
+        // 미니룸 화면 표시
+        function showHome() {
+            document.getElementById("home-view").style.display = "block";
+            document.getElementById("board-view").style.display = "none";
+        }
+
+
+        // 자유게시판 화면 표시
+        function showFreeboard() {
+            document.getElementById("home-view").style.display = "none";
+            document.getElementById("board-view").style.display = "block";
+        }
+
+
+        // 날짜 출력
         document.addEventListener("DOMContentLoaded", function() {
+
             const today = new Date();
+
             const year = today.getFullYear();
             const month = today.getMonth() + 1;
             const day = today.getDate();
+
             const dateElement = document.getElementById("current-date");
+
             if (dateElement) {
-                dateElement.innerText = year + "년 " + month + "월 " + day + "일";
+                dateElement.innerText =
+                    year + "년 " + month + "월 " + day + "일";
             }
+
         });
+
 
         // 운세 데이터
         const fortunes = [
@@ -437,113 +660,183 @@
             "친구(안소영)에게 맛있는 걸 사주기 좋은 날이네요"
         ];
 
+
         function showFortune() {
+
             const randomIndex = Math.floor(Math.random() * fortunes.length);
+
             const fortuneText = document.getElementById("fortune-text");
+
             if (fortuneText) {
                 fortuneText.innerText = fortunes[randomIndex];
             }
+
         }
 
-        // 팝업 모달창 열기
+
+        // 팝업창 열기
         function openModal(modalId) {
+
             const modal = document.getElementById(modalId);
+
             if (modal) {
+
                 modal.style.display = "flex";
+
                 if (modalId === 'card-game-modal') {
                     startCardGame();
                 }
+
             }
+
         }
 
-        // 팝업 모달창 닫기
+
+        // 팝업창 닫기
         function closeModal(modalId) {
+
             const modal = document.getElementById(modalId);
+
             if (modal) {
                 modal.style.display = "none";
             }
+
         }
 
-        // 카드 짝 맞추기 게임 로직
+
+        // 카드 게임 이미지
         const cardImages = [
-            "card1.jpg", "card2.jpg", "card3.jpg", "card4.jpg",
-            "card5.jpg", "card6.jpg", "card7.jpg", "card8.jpg"
+            "card1.jpg",
+            "card2.jpg",
+            "card3.jpg",
+            "card4.jpg",
+            "card5.jpg",
+            "card6.jpg",
+            "card7.jpg",
+            "card8.jpg"
         ];
+
 
         let flippedCards = [];
         let matchedCount = 0;
         let isLockBoard = false;
 
+
+        // 카드 게임 시작
         function startCardGame() {
+
             const grid = document.getElementById("game-grid");
+
             if (!grid) return;
+
             grid.innerHTML = "";
+
             flippedCards = [];
             matchedCount = 0;
             isLockBoard = false;
-            
+
             const statusEl = document.getElementById("game-status");
+
             if (statusEl) {
                 statusEl.innerText = "카드를 뒤집어 짝을 맞춰보세요!";
             }
 
             let deck = [...cardImages, ...cardImages];
+
             deck.sort(() => Math.random() - 0.5);
 
             deck.forEach((imgSrc) => {
+
                 const card = document.createElement("div");
+
                 card.classList.add("card");
                 card.dataset.image = imgSrc;
 
                 const img = document.createElement("img");
+
                 img.src = imgSrc;
                 img.alt = "카드 이미지";
+
                 card.appendChild(img);
 
                 card.addEventListener("click", flipCard);
+
                 grid.appendChild(card);
+
             });
+
         }
 
+
+        // 카드 뒤집기
         function flipCard() {
+
             if (isLockBoard) return;
             if (this === flippedCards[0]) return;
-            if (this.classList.contains("matched") || this.classList.contains("flipped")) return;
+
+            if (
+                this.classList.contains("matched") ||
+                this.classList.contains("flipped")
+            ) {
+                return;
+            }
 
             this.classList.add("flipped");
+
             flippedCards.push(this);
 
             if (flippedCards.length === 2) {
                 checkForMatch();
             }
+
         }
 
+
+        // 카드 짝 확인
         function checkForMatch() {
+
             const [card1, card2] = flippedCards;
+
             const isMatch = card1.dataset.image === card2.dataset.image;
 
             if (isMatch) {
+
                 card1.classList.add("matched");
                 card2.classList.add("matched");
+
                 matchedCount += 2;
+
                 flippedCards = [];
 
                 if (matchedCount === 16) {
+
                     const statusEl = document.getElementById("game-status");
+
                     if (statusEl) {
                         statusEl.innerText = "🎉 ㅊㅋㅊㅋ";
                     }
+
                 }
+
             } else {
+
                 isLockBoard = true;
+
                 setTimeout(() => {
+
                     card1.classList.remove("flipped");
                     card2.classList.remove("flipped");
+
                     flippedCards = [];
                     isLockBoard = false;
+
                 }, 800);
+
             }
+
         }
+
     </script>
+
 </body>
 </html>
