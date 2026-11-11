@@ -125,21 +125,62 @@ async function loadGuestbook() {
             return;
         }
 
-        validEntries.reverse().forEach(entry => {
-            const box = document.createElement("div");
-            box.className = "entry";
+       
+validEntries.reverse().forEach(entry => {
+    const box = document.createElement("div");
+    box.className = "entry";
 
-            const info = document.createElement("div");
-            info.className = "entry-info";
-            info.textContent = entry.name + " · " + entry.date;
+    const info = document.createElement("div");
+    info.className = "entry-info";
+    info.textContent = entry.name + " · " + entry.date;
 
-            const message = document.createElement("div");
-            message.textContent = entry.message;
+    const message = document.createElement("div");
 
-            box.appendChild(info);
-            box.appendChild(message);
-            list.appendChild(box);
-        });
+    // URL 자동 인식
+    const urlRegex = /https?:\/\/[^\s<>"']+/gi;
+    const text = entry.message;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+        const url = match[0];
+
+        // URL 뒤에 붙은 문장부호 분리
+        const cleanUrl = url.replace(/[.,!?;:]+$/, "");
+        const trailing = url.slice(cleanUrl.length);
+
+        // URL 앞의 일반 텍스트
+        message.appendChild(
+            document.createTextNode(text.slice(lastIndex, match.index))
+        );
+
+        // 클릭 가능한 링크 생성
+        const link = document.createElement("a");
+        link.href = cleanUrl;
+        link.textContent = cleanUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.style.color = "#B41C28";
+        link.style.textDecoration = "underline";
+
+        message.appendChild(link);
+
+        // URL 뒤의 문장부호
+        message.appendChild(document.createTextNode(trailing));
+
+        lastIndex = match.index + url.length;
+    }
+
+    // 마지막 URL 뒤의 일반 텍스트
+    message.appendChild(
+        document.createTextNode(text.slice(lastIndex))
+    );
+
+    // 방명록 화면에 추가
+    box.appendChild(info);
+    box.appendChild(message);
+    list.appendChild(box);
+});
 
     } catch (error) {
         list.textContent = "방명록을 불러오지 못했어요. 다시 시도해 주세요.";
