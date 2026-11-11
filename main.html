@@ -27,13 +27,11 @@
 
         /* 왼쪽 바깥 공간에 띄울 아바타 위치 조절 */
 
+
 .side-avatar {
-    position: absolute;
-    right: calc(50% - 610px);
-    top: 30%;
-    width: 150px;
+    width: 130px;
+    margin: 10px auto 0;
     text-align: center;
-    z-index: 10;
 }
 
 .side-avatar img {
@@ -41,7 +39,6 @@
     height: auto;
     display: block;
 }
-
         .homepage {
             width: 1000px;
             min-height: 600px;
@@ -319,12 +316,6 @@
     </style>
 </head>
 <body>
-
-    <!-- 왼쪽 바깥 공간에 떠 있는 아바타 GIF -->
-    <div class="side-avatar">
-        <img src="왼쪽 아바타.gif" alt="어서오세요 아바타">
-    </div>
-
     <div class="homepage">
         <!-- 왼쪽 프로필 -->
         <aside class="profile">
@@ -377,6 +368,9 @@
             <a href="board.html">공유사진첩</a>
             <a href="#">자유게시판</a>
             <a href="https://www.youtube.com/@lastforaday" target="_blank" class="youtube">▶ YouTube</a>
+            <div class="side-avatar">
+    <img src="왼쪽 아바타.gif" alt="어서오세요 아바타">
+</div>
         </nav>
     </div>
 
